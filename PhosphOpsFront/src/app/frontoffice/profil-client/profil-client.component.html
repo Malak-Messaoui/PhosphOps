@@ -1,0 +1,146 @@
+<app-navbar></app-navbar>
+
+<main class="screen stack">
+
+  <ng-container *ngIf="!chargement && profile">
+
+    <div class="profile-head">
+      <div class="profile-avatar">{{ initiale }}</div>
+      <h2 class="profile-name">{{ profile.nom }}</h2>
+      <span class="badge bg-info text-info" style="margin-top:8px">{{ roleLabel }}</span>
+    </div>
+
+    <p *ngIf="succes" style="color:var(--color-success, #16a34a); font-size:0.85rem; text-align:center; margin-bottom:12px">
+      {{ succes }}
+    </p>
+
+    <!-- ===== MODE VUE ===== -->
+    <ng-container *ngIf="!modeEdition && !modeChangementMdp">
+
+      <div class="info-list">
+        <div class="row"><span class="k">Matricule</span><span class="v">{{ profile.matricule || '—' }}</span></div>
+        <div class="row"><span class="k">Email</span><span class="v">{{ profile.email }}</span></div>
+        <div class="row"><span class="k">Téléphone</span><span class="v">{{ profile.telephone || '—' }}</span></div>
+        <div class="row"><span class="k">Site</span><span class="v">{{ profile.site || '—' }}</span></div>
+        <div class="row"><span class="k">Département</span><span class="v">{{ profile.departement || '—' }}</span></div>
+      </div>
+
+      <div class="stack">
+        <button type="button" class="btn btn-outline btn-block" (click)="ouvrirEdition()">
+          Modifier le profil
+        </button>
+        <button type="button" class="btn btn-outline-muted btn-block" (click)="ouvrirChangementMdp()">
+          Changer le mot de passe
+        </button>
+      </div>
+
+    </ng-container>
+
+    <!-- ===== MODE ÉDITION PROFIL ===== -->
+    <ng-container *ngIf="modeEdition">
+
+      <form [formGroup]="form" (ngSubmit)="enregistrer()" novalidate class="card">
+
+        <div class="field">
+          <label>Nom complet</label>
+          <input class="input" type="text" formControlName="nom">
+          <p *ngIf="form.get('nom')?.touched && form.get('nom')?.invalid"
+             style="color:var(--color-danger, #dc2626); font-size:0.8rem">
+            Le nom est requis
+          </p>
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input class="input" type="email" formControlName="email">
+          <p *ngIf="form.get('email')?.touched && form.get('email')?.invalid"
+             style="color:var(--color-danger, #dc2626); font-size:0.8rem">
+            Email invalide
+          </p>
+        </div>
+
+        <div class="field">
+          <label>Téléphone</label>
+          <input class="input" type="text" formControlName="telephone">
+        </div>
+
+        <div class="field">
+          <label>Site</label>
+          <input class="input" type="text" formControlName="site">
+        </div>
+
+        <div class="field">
+          <label>Département</label>
+          <input class="input" type="text" formControlName="departement">
+        </div>
+
+        <p *ngIf="erreur" style="color:var(--color-danger, #dc2626); font-size:0.85rem; margin-bottom:12px">
+          {{ erreur }}
+        </p>
+
+        <div class="stack">
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="enregistrementEnCours">
+            {{ enregistrementEnCours ? 'Enregistrement…' : 'Enregistrer' }}
+          </button>
+          <button type="button" class="btn btn-outline-muted btn-block" (click)="annulerEdition()">
+            Annuler
+          </button>
+        </div>
+
+      </form>
+
+    </ng-container>
+
+    <!-- ===== MODE CHANGEMENT MOT DE PASSE ===== -->
+    <ng-container *ngIf="modeChangementMdp">
+
+      <form [formGroup]="formMdp" (ngSubmit)="changerMotDePasse()" novalidate class="card">
+
+        <div class="field">
+          <label>Ancien mot de passe</label>
+          <input class="input" type="password" formControlName="oldPassword">
+        </div>
+
+        <div class="field">
+          <label>Nouveau mot de passe</label>
+          <input class="input" type="password" formControlName="newPassword">
+          <p *ngIf="formMdp.get('newPassword')?.touched && formMdp.get('newPassword')?.invalid"
+             style="color:var(--color-danger, #dc2626); font-size:0.8rem">
+            Minimum 6 caractères
+          </p>
+        </div>
+
+        <div class="field">
+          <label>Confirmer le nouveau mot de passe</label>
+          <input class="input" type="password" formControlName="confirmPassword">
+        </div>
+
+        <p *ngIf="formMdp.errors?.['mdpDifferents'] && formMdp.get('confirmPassword')?.touched"
+           style="color:var(--color-danger, #dc2626); font-size:0.85rem; margin-bottom:12px">
+          Les mots de passe ne correspondent pas
+        </p>
+
+        <p *ngIf="erreurMdp" style="color:var(--color-danger, #dc2626); font-size:0.85rem; margin-bottom:12px">
+          {{ erreurMdp }}
+        </p>
+
+        <div class="stack">
+          <button type="submit" class="btn btn-primary btn-block" [disabled]="enregistrementMdpEnCours">
+            {{ enregistrementMdpEnCours ? 'Modification…' : 'Confirmer' }}
+          </button>
+          <button type="button" class="btn btn-outline-muted btn-block" (click)="annulerChangementMdp()">
+            Annuler
+          </button>
+        </div>
+
+      </form>
+
+    </ng-container>
+
+  </ng-container>
+
+  <div *ngIf="chargement" class="empty-state">Chargement du profil...</div>
+
+  <div *ngIf="!chargement && !profile" class="empty-state">Impossible de charger le profil</div>
+
+</main>

@@ -1,0 +1,462 @@
+<div class="admin-shell">
+
+  <div 
+    class="sidebar__overlay" 
+    [class.is-visible]="menuMobileOuvert()" 
+    (click)="fermerMenuMobile()">
+  </div>
+
+  <app-menu [menuMobileOuvert]="menuMobileOuvert()"></app-menu>
+
+
+  <div class="main">
+
+  <app-header (toggleMenu)="toggleMenuMobile()"></app-header>
+
+
+
+    <main class="content">
+
+
+      <div class="page-head">
+
+        <div>
+          <h1>Gestion des équipements</h1>
+
+          <p>
+            {{equipements.length}} équipements enregistrés
+          </p>
+        </div>
+
+
+        <button 
+          type="button"
+          class="btn btn-primary"
+          (click)="openAddModal()">
+
+          <i data-lucide="plus"></i>
+          Ajouter
+
+        </button>
+
+
+      </div>
+
+
+
+
+      <div class="table-card">
+
+
+        <div class="table-scroll">
+
+
+          <table>
+
+
+            <thead>
+
+              <tr>
+                <th>Code</th>
+                <th>Date achat</th>
+                <th>Catégorie</th>
+                <th>Etat</th>
+                <th>Actions</th>
+              </tr>
+
+            </thead>
+
+
+
+            <tbody>
+
+
+              <tr *ngFor="let eq of filteredEquipements">
+
+
+                <td class="mono">
+                  {{eq.matriculeEquipement}}
+                </td>
+
+
+
+                <td>
+                  {{eq.dateAchatEquipement | date:'yyyy-MM-dd'}}
+                </td>
+
+
+
+                <td>
+                  {{eq.categorieEquipement}}
+                </td>
+
+
+
+                <td>
+
+                  <span 
+                    class="badge"
+                    [ngClass]="badgeClass(eq.etatEquipement)">
+
+                    <span class="dot"></span>
+
+                    {{eq.etatEquipement}}
+
+                  </span>
+
+                </td>
+
+
+
+<td>
+  <div class="actions">
+
+    <!-- consulter -->
+    <button 
+      type="button"
+      aria-label="Consulter"
+      (click)="consulter(eq)">
+
+      <i 
+        data-lucide="eye"
+        class="text-info">
+      </i>
+
+    </button>
+
+
+    <!-- modifier -->
+    <button 
+      type="button"
+      aria-label="Modifier"
+      (click)="openEditModal(eq)">
+
+      <i 
+        data-lucide="edit"
+        class="text-info">
+      </i>
+
+    </button>
+
+
+    <!-- supprimer -->
+    <button 
+      type="button"
+      aria-label="Supprimer"
+      (click)="onDelete(eq.idEquipement)">
+
+      <i 
+        data-lucide="trash-2"
+        class="text-danger">
+      </i>
+
+    </button>
+
+
+  </div>
+</td>
+
+
+              </tr>
+
+
+
+              <tr *ngIf="filteredEquipements.length === 0">
+
+                <td colspan="5" style="text-align:center">
+
+                  Aucun équipement trouvé
+
+                </td>
+
+              </tr>
+
+
+            </tbody>
+
+
+          </table>
+
+
+        </div>
+
+
+      </div>
+
+
+
+
+
+      <!-- POPUP AJOUT / MODIFICATION -->
+
+
+      <div 
+        class="modal-overlay"
+        *ngIf="isModalOpen">
+
+
+        <div class="modal">
+
+
+          <div class="modal__head">
+
+
+            <h3>
+
+              {{isEditMode 
+              ? 'Modifier équipement' 
+              : 'Ajouter équipement'}}
+
+            </h3>
+
+
+
+            <button 
+              type="button"
+              (click)="closeModal()">
+
+              <i data-lucide="x"></i>
+
+            </button>
+
+
+          </div>
+
+
+
+
+
+          <form 
+            [formGroup]="equipementForm"
+            (ngSubmit)="onSubmit()">
+
+
+
+
+
+            <div class="field">
+
+              <label>
+                Matricule équipement
+              </label>
+
+
+              <input 
+                class="input"
+                type="text"
+                formControlName="matriculeEquipement"
+                placeholder="EQ-001">
+
+
+            </div>
+
+
+
+
+
+
+            <div class="field">
+
+
+              <label>
+                Date achat
+              </label>
+
+
+              <input 
+                class="input"
+                type="date"
+                formControlName="dateAchatEquipement">
+
+
+            </div>
+
+
+
+
+
+
+            <div class="field">
+
+
+              <label>
+                Catégorie
+              </label>
+
+
+
+              <select 
+                class="select-full"
+                formControlName="categorieEquipement">
+
+
+                <option 
+                  *ngFor="let cat of categories"
+                  [value]="cat">
+
+                  {{cat}}
+
+                </option>
+
+
+              </select>
+
+
+
+            </div>
+
+
+
+
+
+
+            <div class="field">
+
+
+              <label>
+                Etat
+              </label>
+
+
+
+              <select 
+                class="select-full"
+                formControlName="etatEquipement">
+
+
+                <option 
+                  *ngFor="let etat of etats"
+                  [value]="etat">
+
+                  {{etat}}
+
+                </option>
+
+
+              </select>
+
+
+
+            </div>
+
+
+
+
+
+
+            <div class="modal__foot">
+
+
+              <button 
+                type="button"
+                class="btn btn-outline"
+                (click)="closeModal()">
+
+                Annuler
+
+              </button>
+
+
+
+
+
+              <button 
+                type="submit"
+                class="btn btn-primary">
+
+                Enregistrer
+
+              </button>
+
+
+
+            </div>
+
+
+
+
+          </form>
+
+
+
+        </div>
+
+
+      </div>
+
+<div class="modal-overlay" *ngIf="isViewMode">
+
+<div class="modal">
+
+<div class="modal__head">
+
+<h3>Détails équipement</h3>
+
+<button 
+type="button"
+(click)="closeViewModal()">
+
+<i data-lucide="x"></i>
+
+</button>
+
+</div>
+
+
+<div class="field">
+<label>Matricule</label>
+<p>{{selectedEquipement?.matriculeEquipement}}</p>
+</div>
+
+
+<div class="field">
+<label>Date achat</label>
+<p>{{selectedEquipement?.dateAchatEquipement | date:'yyyy-MM-dd'}}</p>
+</div>
+
+
+<div class="field">
+<label>Catégorie</label>
+<p>{{selectedEquipement?.categorieEquipement}}</p>
+</div>
+
+
+<div class="field">
+
+<label>Etat</label>
+
+<span 
+class="badge"
+[class]="badgeClass(selectedEquipement!.etatEquipement)">
+
+{{selectedEquipement?.etatEquipement}}
+
+</span>
+
+</div>
+
+
+<div class="modal__foot">
+
+<button 
+class="btn btn-outline"
+(click)="closeViewModal()">
+
+Fermer
+
+</button>
+
+</div>
+
+
+</div>
+
+</div>
+
+    </main>
+
+
+  </div>
+
+
+</div>

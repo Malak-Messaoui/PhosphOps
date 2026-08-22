@@ -1,0 +1,64 @@
+<app-navbar></app-navbar>
+
+<main class="screen stack-lg">
+  <h2 class="screen-title">Déclarer une panne</h2>
+
+  <form [formGroup]="form" (ngSubmit)="soumettre()" class="stack" novalidate>
+
+    <div class="field">
+      <label>Type de panne</label>
+      <select class="select" formControlName="typePanne">
+        <option value="" disabled>Sélectionner un type</option>
+        <option *ngFor="let type of typesPanne" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Matricule équipement</label>
+      <input class="input" type="text" formControlName="matriculeEquipement" placeholder="EQ-4521">
+    </div>
+
+    <div class="field">
+      <label>Description</label>
+      <textarea class="textarea input" rows="4" formControlName="descPanne" placeholder="Décrivez le problème rencontré..."></textarea>
+    </div>
+
+    <div class="field">
+      <label>Priorité</label>
+      <div class="priority-select">
+        <button
+          type="button"
+          *ngFor="let p of priorites"
+          [class.bg-danger]="form.value.priorite === p.value && p.value === 'URGENT'"
+          [class.text-danger]="form.value.priorite === p.value && p.value === 'URGENT'"
+          [class.bg-warning]="form.value.priorite === p.value && p.value === 'NORMAL'"
+          [class.text-warning]="form.value.priorite === p.value && p.value === 'NORMAL'"
+          [class.bg-success]="form.value.priorite === p.value && p.value === 'FAIBLE'"
+          [class.text-success]="form.value.priorite === p.value && p.value === 'FAIBLE'"
+          (click)="choisirPriorite(p.value)">
+          {{ p.label }}
+        </button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Photo (optionnel)</label>
+      <div class="dropzone" (click)="fileInput.click()">
+        <ng-container *ngIf="!photoPreview">
+          <i data-lucide="upload"></i>
+          <strong>Ajouter une photo</strong>
+          <span>PNG, JPG jusqu'à 10 Mo</span>
+        </ng-container>
+        <img *ngIf="photoPreview" [src]="photoPreview" style="max-width:100%;border-radius:8px" alt="Aperçu">
+      </div>
+      <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden>
+    </div>
+
+    <p *ngIf="erreur" style="color:var(--color-danger);font-size:.85rem">{{ erreur }}</p>
+
+    <button type="submit" class="btn btn-primary btn-block" [disabled]="envoiEnCours">
+      {{ envoiEnCours ? 'Envoi en cours…' : 'Déclarer la panne' }}
+    </button>
+
+  </form>
+</main>

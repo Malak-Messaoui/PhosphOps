@@ -1,0 +1,129 @@
+<app-navbar></app-navbar>
+
+<main class="screen stack">
+
+  <div>
+    <h2 class="screen-title">Équipements</h2>
+    <p class="screen-subtitle">{{ equipements.length }} équipements recensés</p>
+  </div>
+
+  <div class="search-box">
+    <i data-lucide="search"></i>
+    <input
+      class="input"
+      type="search"
+      placeholder="Rechercher..."
+      [(ngModel)]="recherche"
+      aria-label="Rechercher un équipement">
+  </div>
+
+  <div class="chip-row">
+    <button
+      class="chip"
+      [class.is-active]="filtreActif === 'tous'"
+      (click)="setFiltre('tous')">
+      Tous
+    </button>
+    <button
+      class="chip"
+      [class.is-active]="filtreActif === EtatEquipement.FONCTIONNEL"
+      (click)="setFiltre(EtatEquipement.FONCTIONNEL)">
+      Fonctionnel
+    </button>
+    <button
+      class="chip"
+      [class.is-active]="filtreActif === EtatEquipement.MAINTENANCE"
+      (click)="setFiltre(EtatEquipement.MAINTENANCE)">
+      Maintenance
+    </button>
+    <button
+      class="chip"
+      [class.is-active]="filtreActif === EtatEquipement.PANNE"
+      (click)="setFiltre(EtatEquipement.PANNE)">
+      Panne
+    </button>
+  </div>
+
+  <div class="stack" *ngIf="!chargement">
+
+    <div
+      class="list-item"
+      *ngFor="let eq of equipementsFiltres"
+      (click)="openDetail(eq)"
+      style="cursor:pointer">
+      <span class="item-icon"><i data-lucide="gauge"></i></span>
+      <span class="item-body">
+        <strong>{{ eq.matriculeEquipement }}</strong>
+        <span class="meta"><i data-lucide="tag"></i>{{ eq.categorieEquipement }}</span>
+      </span>
+      <span class="item-side">
+        <span class="badge badge-status-{{ etatClasse(eq.etatEquipement) }}">
+          <span class="dot"></span>{{ etatLabel(eq.etatEquipement) }}
+        </span>
+        <small>EQ-{{ eq.idEquipement }}</small>
+      </span>
+    </div>
+
+    <div class="empty-state" *ngIf="equipementsFiltres.length === 0">
+      <i data-lucide="wrench"></i>
+      <p>Aucun équipement trouvé</p>
+    </div>
+
+  </div>
+
+  <div class="empty-state" *ngIf="chargement">
+    <p>Chargement des équipements...</p>
+  </div>
+
+</main>
+
+<!-- ============ POPUP DÉTAIL ÉQUIPEMENT ============ -->
+<div class="modal-overlay" *ngIf="selectedEquipement" (click)="closeDetail()">
+  <div class="detail-card modal-content" (click)="$event.stopPropagation()">
+
+    <button class="close-btn" (click)="closeDetail()" aria-label="Fermer">
+      <i data-lucide="x"></i>
+    </button>
+
+    <div class="detail-head">
+      <div>
+        <h2>{{ selectedEquipement.matriculeEquipement }}</h2>
+        <p class="sub">EQ-{{ selectedEquipement.idEquipement }} • {{ selectedEquipement.categorieEquipement }}</p>
+      </div>
+      <span class="badge badge-status-{{ etatClasse(selectedEquipement.etatEquipement) }}">
+        <span class="dot"></span>{{ etatLabel(selectedEquipement.etatEquipement) }}
+      </span>
+    </div>
+
+    <div class="detail-grid">
+      <div class="box">
+        <p class="k">Catégorie</p>
+        <p class="v">{{ selectedEquipement.categorieEquipement }}</p>
+      </div>
+      <div class="box">
+        <p class="k">État</p>
+        <p class="v">{{ etatLabel(selectedEquipement.etatEquipement) }}</p>
+      </div>
+      <!--
+        Ajoute ici d'autres champs de ton modèle Equipement s'ils existent
+        (ex: site, dateInstallation, dureeVie) — je n'ai que ceux visibles
+        dans ton .ts actuel (matricule, categorie, etat, id).
+      -->
+    </div>
+
+    <h3 class="section-title">Historique des interventions</h3>
+    <ul class="timeline">
+      <li class="timeline-item" *ngFor="let h of historique">
+        <span class="tdot"></span>
+        <div class="tcard">
+          <p>{{ h.description }}</p>
+          <time>{{ h.date | date }}</time>
+        </div>
+      </li>
+      <li class="empty-state" *ngIf="historique.length === 0">
+        Aucune intervention enregistrée.
+      </li>
+    </ul>
+
+  </div>
+</div>

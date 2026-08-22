@@ -1,0 +1,102 @@
+.chart-wrap {
+  height: 300px;
+  position: relative;
+}
+
+.chart-wrap--sm {
+  height: 250px;
+}
+
+canvas {
+  max-width:100%;
+}
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.charts-grid canvas {
+  max-height: 220px;
+}
+
+.lists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.defaillant-row {
+  margin-bottom: 14px;
+}
+
+.defaillant-head {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  background: var(--color-primary, #2563eb);
+}
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.charts-grid .card {
+  position: relative;
+  height: 320px; /* hauteur fixe obligatoire pour Chart.js */
+}
+
+.charts-grid canvas {
+  max-height: 260px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.lists-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.charts-grid .card {
+  min-height: 320px;
+}
+
+.charts-grid canvas {
+  max-height: 260px;
+}
+.chart-wrap {
+  position: relative;
+  height: 260px;
+  width: 100%;
+}
+
+.chart-wrap canvas {
+  width: 100% !important;
+  height: 100% !important;
+}

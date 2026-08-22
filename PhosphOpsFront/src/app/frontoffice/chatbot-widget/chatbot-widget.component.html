@@ -1,0 +1,41 @@
+<div class="chatbot-widget">
+  <button class="chatbot-fab" (click)="toggle()" aria-label="Assistant PhosphOps">
+    <i data-lucide="bot" *ngIf="!isOpen()" style="width:24px;height:24px"></i>
+    <i data-lucide="x" *ngIf="isOpen()" style="width:24px;height:24px"></i>
+  </button>
+
+  <div class="chatbot-panel" *ngIf="isOpen()">
+    <div class="chatbot-panel__header">
+      <i data-lucide="bot" style="width:18px;height:18px"></i>
+      <span>Assistant PhosphOps</span>
+    </div>
+
+    <div class="chatbot-panel__messages">
+      <div
+        *ngFor="let msg of messages()"
+        class="chatbot-msg"
+        [class.chatbot-msg--user]="msg.role === 'user'"
+      >
+        {{ msg.text }}
+      </div>
+
+      <div *ngIf="loading()" class="chatbot-msg chatbot-msg--loading">
+        L'assistant réfléchit...
+      </div>
+    </div>
+
+    <form class="chatbot-panel__input" (ngSubmit)="send()">
+      <input
+        type="text"
+        [(ngModel)]="inputText"
+        name="message"
+        placeholder="Écrivez votre question..."
+        [disabled]="loading()"
+        autocomplete="off"
+      />
+      <button type="submit" [disabled]="loading()" aria-label="Envoyer">
+        <i data-lucide="send" style="width:16px;height:16px"></i>
+      </button>
+    </form>
+  </div>
+</div>

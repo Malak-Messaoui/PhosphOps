@@ -1,0 +1,77 @@
+<header class="topbar">
+
+
+<button 
+class="hamburger icon-btn"
+type="button"
+(click)="toggleMenuMobile()">
+
+<i data-lucide="menu"></i>
+
+</button>
+
+
+
+
+<div 
+class="topbar__search"
+*ngIf="afficherRecherche">
+
+
+<i data-lucide="search"></i>
+
+
+<input
+type="search"
+placeholder="Rechercher..."
+aria-label="Recherche globale"
+/>
+
+
+</div>
+
+
+
+
+
+<div class="topbar__actions">
+
+
+
+
+
+
+
+
+
+<div class="topbar__who">
+
+
+<span class="av">
+
+{{getInitiale()}}
+
+</span>
+
+
+
+<span>
+
+{{user?.name}}
+
+</span>
+
+
+
+
+
+
+</div>
+
+
+
+
+</div>
+
+
+</header>

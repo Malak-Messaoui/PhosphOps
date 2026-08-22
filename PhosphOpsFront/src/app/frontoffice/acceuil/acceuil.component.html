@@ -1,0 +1,85 @@
+<app-navbar></app-navbar>
+
+<div
+  *ngIf="afficherToast"
+  class="notif"
+  style="position:fixed;top:70px;right:16px;z-index:200;background:var(--color-success-bg);border-color:var(--color-success)">
+  <span class="dot" style="background:var(--color-success)"></span>
+  <p style="color:var(--color-success);font-weight:600">Panne déclarée avec succès ✓</p>
+</div>
+
+<main class="screen stack-lg">
+
+  <div class="banner">
+    <p>Bonjour,</p>
+    <h2>{{ nomUtilisateur }}</h2>
+    <p class="meta">Technicien • Mine Khouribga</p>
+    <div class="date-row">
+      <i data-lucide="calendar" style="width:12px;height:12px"></i>
+      <span>{{ aujourdHui | date:'EEEE d MMMM y':'':'fr' }}</span>
+    </div>
+  </div>
+
+  <section>
+    <h3 class="section-title">Mes statistiques</h3>
+    <div class="grid-3">
+      <div class="stat-card">
+        <div class="stat-icon bg-danger"><i data-lucide="triangle-alert" class="text-danger"></i></div>
+        <p class="stat-value text-danger">7</p>
+        <p class="stat-label">Pannes déclarées</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon bg-warning"><i data-lucide="clock" class="text-warning"></i></div>
+        <p class="stat-value text-warning">2</p>
+        <p class="stat-label">En cours</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon bg-success"><i data-lucide="check-circle" class="text-success"></i></div>
+        <p class="stat-value text-success">4h20</p>
+        <p class="stat-label">Temps moyen</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="section-title">Actions rapides</h3>
+    <div class="grid-2">
+      <a class="action-card" routerLink="/panne">
+        <span class="icon-wrap bg-danger"><i data-lucide="triangle-alert" class="text-danger"></i></span>
+        <span><strong>Déclarer</strong><span>une panne</span></span>
+      </a>
+      <a class="action-card" routerLink="/interventions">
+        <span class="icon-wrap bg-info"><i data-lucide="wrench" class="text-info"></i></span>
+        <span><strong>Interventions</strong><span>mes missions</span></span>
+      </a>
+      <a class="action-card" routerLink="/list-
+      equipements">
+        <span class="icon-wrap bg-success"><i data-lucide="gauge" class="text-success"></i></span>
+        <span><strong>Équipements</strong><span>consulter</span></span>
+      </a>
+      <a class="action-card" routerLink="/contact">
+        <span class="icon-wrap bg-warning"><i data-lucide="phone" class="text-warning"></i></span>
+        <span><strong>Contact</strong><span>support</span></span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h3 class="section-title">Notifications</h3>
+    <div class="stack">
+      <div class="notif">
+        <span class="dot bg-info" style="background:var(--color-primary)"></span>
+        <div><p>L'intervention INT-2024-002 vous a été assignée</p><time>il y a 30 min</time></div>
+      </div>
+      <div class="notif">
+        <span class="dot" style="background:var(--color-success)"></span>
+        <div><p>Demande DM-2024-004 marquée comme terminée</p><time>il y a 2h</time></div>
+      </div>
+      <div class="notif">
+        <span class="dot" style="background:var(--color-warning)"></span>
+        <div><p>Pièce 'Joint mécanique DN50' en stock faible</p><time>il y a 4h</time></div>
+      </div>
+    </div>
+  </section>
+
+</main>

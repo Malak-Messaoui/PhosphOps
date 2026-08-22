@@ -1,0 +1,35 @@
+<aside class="sidebar" [class.is-open]="menuMobileOuvert">
+<div class="sidebar__brand">
+  <div class="brand-logo-wrap">
+    <img src="assets/shared/images/logo.svg" alt="PhosphOps Logo" class="brand-logo">
+  </div>
+  <div class="brand-text">
+    <strong>PhosphOps</strong>
+    <small>Back Office</small>
+  </div>
+</div>
+  <nav class="sidebar__nav" aria-label="Navigation principale">
+    <a routerLink="/home" routerLinkActive="is-active" data-nav="dashboard"><i data-lucide="bar-chart-2"></i>Dashboard</a>
+    <a routerLink="/utilisateurs" routerLinkActive="is-active" data-nav="utilisateurs"><i data-lucide="users"></i>Utilisateurs</a>
+    <a routerLink="/equipements" routerLinkActive="is-active" data-nav="equipements"><i data-lucide="wrench"></i>Équipements</a>
+    <a routerLink="/demandes" routerLinkActive="is-active" data-nav="demandes"><i data-lucide="clipboard-list"></i>Demandes</a>
+        <a routerLink="/profile" routerLinkActive="is-active" data-nav="profile"><i data-lucide="star"></i>Profil</a>
+
+  </nav>
+ <div class="sidebar__user">
+  <span class="av">{{ initiale }}</span>
+
+  <div class="who">
+    <strong>{{ user?.name }}</strong>
+    <small>{{ user?.role }}</small>
+  </div>
+
+  <button 
+    class="logout-btn"
+    type="button"
+    aria-label="Se déconnecter"
+    (click)="logout()">
+    <i data-lucide="log-out"></i>
+  </button>
+</div>
+</aside>

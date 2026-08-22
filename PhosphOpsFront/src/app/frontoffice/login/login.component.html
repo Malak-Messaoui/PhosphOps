@@ -1,0 +1,135 @@
+<div class="auth-page">
+  <div class="auth-box">
+
+   <div class="auth-header">
+  <div class="auth-logo-wrap">
+    <img src="assets/shared/images/logo.svg" alt="PhosphOps Logo" class="auth-logo">
+  </div>
+  <h1>PhosphOps</h1>
+  <p>Espace Technicien</p>
+</div>
+
+    <div class="card">
+      <h2 style="font-size:1.125rem;font-weight:700;margin-bottom:20px">Connexion</h2>
+
+      <form [formGroup]="form" (ngSubmit)="soumettre()" novalidate>
+
+        <div class="field">
+          <label for="fo-login-id">Email</label>
+          <input
+            class="input"
+            id="fo-login-id"
+            type="email"
+            formControlName="email"
+            placeholder="a.benchekroun@cpg.ma">
+        </div>
+
+        <div class="field">
+          <label for="fo-login-pwd">Mot de passe</label>
+          <input
+            class="input"
+            id="fo-login-pwd"
+            type="password"
+            formControlName="password"
+            placeholder="••••••••">
+        </div>
+
+       <div class="link-row">
+  <a class="link-btn" href="#" style="font-size:.875rem" (click)="ouvrirPopup(); $event.preventDefault()">Mot de passe oublié ?</a>
+</div>
+        <p
+          *ngIf="erreur"
+          style="color:var(--color-danger, #dc2626); font-size:0.85rem; margin-bottom:12px">
+          {{ erreur }}
+        </p>
+
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          [disabled]="envoiEnCours">
+          {{ envoiEnCours ? 'Connexion en cours…' : 'Se connecter' }}
+        </button>
+
+        <div style="text-align:center;margin:16px 0;color:var(--color-muted,#9ca3af);font-size:.8rem">— ou —</div>
+
+<button
+  type="button"
+  class="btn btn-block"
+  style="border:1px solid #e5e7eb;background:#fff;display:flex;align-items:center;justify-content:center;gap:8px"
+  (click)="connexionGoogle()">
+  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" height="18" alt="">
+  Continuer avec Google
+</button>
+
+      </form>
+    </div>
+
+    <p class="auth-footer">
+      Pas encore de compte ?
+      <a class="link-btn" routerLink="/register">S'inscrire</a>
+    </p>
+
+  </div>
+  <!-- Popup Mot de passe oublié -->
+<div class="modal-overlay" *ngIf="afficherPopup" (click)="fermerPopup()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+
+    <button class="modal-close" type="button" (click)="fermerPopup()">&times;</button>
+
+    <h2 style="font-size:1.125rem;font-weight:700;margin-bottom:6px">Mot de passe oublié</h2>
+    <p style="font-size:.85rem;color:var(--color-muted, #6b7280);margin-bottom:20px">
+      Entrez votre email et votre nouveau mot de passe.
+    </p>
+
+    <form [formGroup]="forgotForm" (ngSubmit)="soumettreForgot()" novalidate>
+
+      <div class="field">
+        <label for="fp-email">Email</label>
+        <input
+          class="input"
+          id="fp-email"
+          type="email"
+          formControlName="email"
+          placeholder="a.benchekroun@cpg.ma">
+      </div>
+
+      <div class="field">
+        <label for="fp-newpwd">Nouveau mot de passe</label>
+        <input
+          class="input"
+          id="fp-newpwd"
+          type="password"
+          formControlName="newPassword"
+          placeholder="••••••••">
+      </div>
+
+      <div class="field">
+        <label for="fp-confirmpwd">Confirmer le mot de passe</label>
+        <input
+          class="input"
+          id="fp-confirmpwd"
+          type="password"
+          formControlName="confirmPassword"
+          placeholder="••••••••">
+      </div>
+
+      <p *ngIf="forgotErreur" style="color:var(--color-danger, #dc2626); font-size:0.85rem; margin-bottom:12px">
+        {{ forgotErreur }}
+      </p>
+
+      <p *ngIf="forgotSucces" style="color:#16a34a; font-size:0.85rem; margin-bottom:12px">
+        {{ forgotSucces }}
+      </p>
+
+      <button
+        type="submit"
+        class="btn btn-primary btn-block"
+        [disabled]="forgotEnCours">
+        {{ forgotEnCours ? 'Envoi en cours…' : 'Réinitialiser' }}
+      </button>
+
+    </form>
+
+  </div>
+</div>
+</div>

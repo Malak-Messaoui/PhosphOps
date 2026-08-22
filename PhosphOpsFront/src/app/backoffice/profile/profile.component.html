@@ -1,0 +1,176 @@
+<div class="admin-shell">
+
+  <div
+    class="sidebar__overlay"
+    [class.is-visible]="menuMobileOuvert"
+    (click)="fermerMenuMobile()">
+  </div>
+
+  <app-menu [menuMobileOuvert]="menuMobileOuvert"></app-menu>
+
+  <div class="main">
+
+   <app-header (toggleMenu)="toggleMenuMobile()"></app-header>
+
+    <main class="content">
+
+      <h1 style="font-size:1.25rem;font-weight:900;margin-bottom:16px">
+        Mon profil
+      </h1>
+
+      <!-- Header -->
+
+      <div class="profile-banner">
+
+        <span class="av">
+          {{ user?.nom?.charAt(0) }}
+        </span>
+
+        <div style="flex:1">
+
+          <!-- Nom -->
+
+          <h2 *ngIf="!editMode">
+            {{ user?.nom }}
+          </h2>
+
+          <input
+            *ngIf="editMode"
+            class="input"
+            [(ngModel)]="formUser.nom">
+
+          <!-- Role -->
+
+          <span
+            class="badge badge-role"
+            style="margin-top:8px;display:inline-flex">
+            {{ user?.role }}
+          </span>
+
+          <!-- Email -->
+
+          <div class="meta">
+
+            <span *ngIf="!editMode">
+              {{ user?.email }}
+            </span>
+
+            <input
+              *ngIf="editMode"
+              class="input"
+              [(ngModel)]="formUser.email">
+
+          </div>
+
+        </div>
+
+        <button
+          *ngIf="!editMode"
+          class="btn btn-outline"
+          (click)="modifier()">
+
+          <i data-lucide="edit"></i>
+
+          Modifier
+
+        </button>
+
+      </div>
+
+      <!-- Informations -->
+
+      <div class="card">
+
+        <h3>
+          Informations personnelles
+        </h3>
+
+        <div class="info-grid">
+
+          <!-- Matricule -->
+<!-- Matricule -->
+<div class="box">
+  <p class="k">Matricule</p>
+  <p class="v">T-00458</p>
+</div>
+
+<!-- Téléphone -->
+<div class="box">
+  <p class="k">Téléphone</p>
+  <p class="v">+216 XX XXX XXX</p>
+</div>
+
+<!-- Département -->
+<div class="box">
+  <p class="k">Département</p>
+  <p class="v">Maintenance</p>
+</div>
+
+<!-- Site -->
+<div class="box">
+  <p class="k">Site principal</p>
+  <p class="v">Khouribga</p>
+</div>
+
+<!-- Date entrée -->
+<div class="box">
+  <p class="k">Date d'entrée</p>
+  <p class="v">01/03/2023</p>
+</div>
+
+        </div>
+
+        <!-- Permissions -->
+
+        <p
+          style="font-size:.75rem;
+          font-weight:700;
+          color:var(--color-muted);
+          margin-bottom:8px">
+
+          Permissions actives
+
+        </p>
+
+        <div class="perm-tags">
+
+          <span>✓ Valider demandes</span>
+          <span>✓ Gérer utilisateurs</span>
+          <span>✓ Gérer équipements</span>
+          <span>✓ Gérer stocks</span>
+          <span>✓ Accès dashboard</span>
+          <span>✓ Exporter rapports</span>
+
+        </div>
+
+        <!-- Boutons -->
+
+        <div
+          *ngIf="editMode"
+          style="margin-top:24px;display:flex;gap:10px">
+
+          <button
+            class="btn btn-primary"
+            (click)="sauvegarder()">
+
+            Enregistrer
+
+          </button>
+
+          <button
+            class="btn btn-outline"
+            (click)="annuler()">
+
+            Annuler
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</div>

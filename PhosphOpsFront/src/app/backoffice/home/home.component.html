@@ -1,0 +1,161 @@
+<div class="admin-shell">
+
+  <!-- Overlay mobile -->
+  <div 
+    class="sidebar__overlay"
+    [class.is-visible]="menuMobileOuvert()"
+    (click)="fermerMenuMobile()">
+  </div>
+
+
+  <app-menu 
+    [menuMobileOuvert]="menuMobileOuvert()">
+  </app-menu>
+
+
+
+  <div class="main">
+
+  <!-- TOPBAR -->
+<app-header 
+  (toggleMenu)="toggleMenuMobile()">
+</app-header>
+
+
+    <main class="content">
+
+      <div class="page-head">
+
+        <div>
+          <h1>
+            Tableau de bord décisionnel
+          </h1>
+
+          <p>
+            Janvier 2024 • Khouribga, Youssoufia, Jorf Lasfar
+          </p>
+        </div>
+
+      </div>
+
+      <!-- KPIs -->
+
+      <div class="kpi-grid">
+
+        <div class="card kpi-card">
+          <p class="k">Total équipements</p>
+          <p class="v" style="font-size:1.75rem;font-weight:900">
+            {{ totalEquipements }}
+          </p>
+        </div>
+
+        <div class="card kpi-card">
+          <p class="k">Pannes en cours</p>
+          <p class="v" style="font-size:1.75rem;font-weight:900;color:var(--color-danger, #dc2626)">
+            {{ totalPannes }}
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Graphiques -->
+
+      <div class="charts-grid">
+
+        <div class="card">
+          <h3>Évolution des pannes</h3>
+          <div class="chart-wrap">
+            <canvas #chartEvolution></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>État du parc</h3>
+          <div class="chart-wrap">
+            <canvas #chartEtat></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Pannes par site</h3>
+          <div class="chart-wrap">
+            <canvas #chartSite></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Pannes par département</h3>
+          <div class="chart-wrap">
+            <canvas #chartDepartement></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Listes -->
+
+      <div class="lists-grid">
+
+        <!-- Équipements défaillants -->
+
+        <div class="card">
+
+          <h3>Équipements les plus défaillants</h3>
+
+          <div class="defaillant-row" *ngFor="let e of equipementsDefaillants">
+
+            <div class="defaillant-head">
+              <span>{{ e.nom }}</span>
+              <span>{{ e.nombre }} pannes</span>
+            </div>
+
+            <div class="progress-bar">
+              <div
+                class="progress-bar__fill"
+                [style.width.%]="e.pourcentage">
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Top utilisateurs -->
+
+        <div class="card">
+
+          <h3>Top intervenants</h3>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Utilisateur</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let u of utilisateurs">
+                  <td>
+                    <div class="cell-user">
+                      <span class="av">{{ u.nom.charAt(0) }}</span>
+                      <strong>{{ u.nom }}</strong>
+                    </div>
+                  </td>
+                  <td>
+                    <span class="badge badge-role">{{ u.score }}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</div>

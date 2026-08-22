@@ -1,0 +1,105 @@
+<div class="admin-shell">
+
+  <div
+    class="sidebar__overlay"
+    [class.is-visible]="menuMobileOuvert"
+    (click)="fermerMenuMobile()">
+  </div>
+
+  <app-menu [menuMobileOuvert]="menuMobileOuvert"></app-menu>
+
+<div class="main">
+       <app-header (toggleMenu)="toggleMenuMobile()"></app-header>
+
+
+  <div class="content">
+    <div class="page-head">
+      <div>
+        <h1>Gestion des demandes</h1>
+        <p>Pannes déclarées par les techniciens</p>
+      </div>
+    </div>
+
+    <div class="chip-row">
+      <button class="chip" [class.is-active]="filtreActif === 'TOUS'" (click)="filtrer('TOUS')">Toutes</button>
+      <button class="chip" [class.is-active]="filtreActif === 'EN_ATTENTE'" (click)="filtrer('EN_ATTENTE')">En attente</button>
+      <button class="chip" [class.is-active]="filtreActif === 'AFFECTEE'" (click)="filtrer('AFFECTEE')">Affectées</button>
+    </div>
+
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Équipement</th>
+              <th>Type</th>
+              <th>Description</th>
+              <th>Priorité</th>
+              <th>Date</th>
+              <th>Technicien</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of demandes">
+              <td class="mono">{{ d.matriculeEquipement }}</td>
+              <td>{{ d.typePanne }}</td>
+              <td class="truncate">{{ d.descPanne }}</td>
+              <td>
+                <span class="badge"
+                  [class.badge-priorite-urgente]="d.priorite === 'URGENT'"
+                  [class.badge-priorite-normale]="d.priorite === 'NORMAL'"
+                  [class.badge-priorite-faible]="d.priorite === 'FAIBLE'">
+                  {{ d.priorite }}
+                </span>
+              </td>
+              <td>{{ d.dateDemande | date:'dd/MM/yy HH:mm' }}</td>
+              <td>{{ d.nomTechnicien ?? '—' }}</td>
+              <td>
+                <span class="badge"
+                  [class.badge-statut-creee]="d.status === 'EN_ATTENTE'"
+                  [class.badge-statut-acceptee]="d.status === 'ACCEPTEE'"
+                  [class.badge-statut-planifiee]="d.status === 'AFFECTEE'"
+                  [class.badge-statut-refusee]="d.status === 'REFUSEE'">
+                  {{ d.status }}
+                </span>
+              </td>
+              <td>
+                <div class="row-actions" *ngIf="d.status === 'EN_ATTENTE'">
+                  <button class="icon-action icon-action--success" (click)="accepter(d.idDemande)" title="Accepter">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                  </button>
+                  <button class="icon-action icon-action--danger" (click)="refuser(d.idDemande)" title="Refuser">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
+                </div>
+
+                <div class="row-actions" *ngIf="d.status === 'ACCEPTEE'">
+                  <button class="btn btn-outline btn-sm" (click)="ouvrirAffectation(d.idDemande)">Affecter</button>
+
+                  <select
+                    *ngIf="demandeAffectationId === d.idDemande"
+                    class="select-sm"
+                    (change)="affecter(d.idDemande, $any($event.target).value)">
+                    <option value="">-- Choisir --</option>
+                    <option *ngFor="let t of techniciens" [value]="t.id">{{ t.fullName }}</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+
+            <tr *ngIf="!chargement && demandes.length === 0">
+              <td colspan="8" class="empty-state">Aucune demande</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

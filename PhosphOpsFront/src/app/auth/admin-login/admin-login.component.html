@@ -1,0 +1,65 @@
+<div class="login-shell">
+  <aside class="login-aside">
+  <div class="login-aside__brand">
+  <div class="aside-logo-wrap">
+    <img src="assets/shared/images/logo.svg" alt="PhosphOps Logo" class="aside-logo">
+  </div>
+  <span style="font-size:1.125rem;font-weight:900">PhosphOps</span>
+</div>
+    <div>
+      <h1>Gestion de maintenance industrielle</h1>
+      <p>Plateforme de pilotage pour les sites miniers et industriels du Groupe Chimique Phosphate.</p>
+      <div class="login-stats">
+        <div><p class="v">124</p><p class="l">Équipements</p></div>
+        <div><p class="v">38</p><p class="l">Techniciens</p></div>
+        <div><p class="v">6</p><p class="l">Sites actifs</p></div>
+        <div><p class="v">73</p><p class="l">Interventions/mois</p></div>
+      </div>
+    </div>
+    <p style="color:rgba(255,255,255,.3);font-size:.75rem">© 2024 OCP Group — Groupe Chimique Phosphate</p>
+  </aside>
+
+  <div class="login-main">
+    <div class="inner">
+      <span class="eyebrow">Espace Admin</span>
+      <h2>Connexion administrateur</h2>
+      <p class="sub">Accès réservé aux responsables et directeurs</p>
+
+      <form [formGroup]="form" (ngSubmit)="soumettre()" novalidate>
+        <div class="field">
+          <label for="bo-id">Identifiant</label>
+          <input
+            class="input"
+            id="bo-id"
+            type="email"
+            formControlName="email"
+            placeholder="votre.identifiant@cpg.ma"
+          />
+        </div>
+        <div class="field">
+          <label for="bo-pwd">Mot de passe</label>
+          <input
+            class="input"
+            id="bo-pwd"
+            type="password"
+            formControlName="password"
+            placeholder="••••••••"
+          />
+        </div>
+
+        <p *ngIf="erreur" style="color:var(--color-danger); font-size:.8125rem; margin-bottom:12px">
+          {{ erreur }}
+        </p>
+
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          style="margin-top:8px"
+          [disabled]="envoiEnCours"
+        >
+          {{ envoiEnCours ? 'Connexion…' : 'Accéder au tableau de bord' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

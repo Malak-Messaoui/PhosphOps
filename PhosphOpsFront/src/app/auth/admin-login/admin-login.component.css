@@ -1,0 +1,22 @@
+.login-aside__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.aside-logo-wrap {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,.95);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.aside-logo {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}

@@ -1,0 +1,89 @@
+:host {
+  display: flex;
+  height: 100%;
+}
+.sidebar__user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.who {
+  flex: 1;
+  overflow: hidden;
+}
+
+.who strong {
+  display: block;
+  color: white;
+  font-size: 15px;
+}
+
+.who small {
+  color: rgba(255,255,255,.7);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.logout-btn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid rgba(255,255,255,.4);
+  background: transparent;
+  border-radius: 3px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.logout-btn:hover {
+  background: rgba(255,255,255,.15);
+}
+
+.logout-btn i {
+  width: 15px;
+  height: 15px;
+}
+.logo-img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+}
+
+.brand-logo-wrap {
+  width: 42px;
+  height: 42px;
+  background: #fff;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+
+.brand-logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+}
+
+.brand-text strong {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.brand-text small {
+  opacity: .7;
+  font-size: .75rem;
+}

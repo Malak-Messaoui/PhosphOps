@@ -1,0 +1,41 @@
+<app-navbar></app-navbar>
+<div class="diagnostic-page">
+  <h2><i data-lucide="brain-circuit" style="width:20px;height:20px"></i> Diagnostic assisté</h2>
+  <p class="diagnostic-page__subtitle">
+    Décrivez la panne observée, l'assistant vous propose des causes probables et les pièces à vérifier.
+  </p>
+
+  <textarea
+    [(ngModel)]="description"
+    rows="4"
+    placeholder="Ex: La pompe P3 fait un bruit anormal et vibre fortement depuis ce matin..."
+  ></textarea>
+
+  <button class="btn-analyser" (click)="analyser()" [disabled]="loading() || !description.trim()">
+    <span *ngIf="!loading()">Analyser</span>
+    <span *ngIf="loading()">Analyse en cours...</span>
+  </button>
+
+  <div *ngIf="error()" class="diagnostic-error">{{ error() }}</div>
+
+  <div *ngIf="result() as res" class="diagnostic-result">
+    <div class="diagnostic-block">
+      <h4><i data-lucide="alert-triangle" style="width:16px;height:16px"></i> Causes probables</h4>
+      <ul>
+        <li *ngFor="let cause of res.causesProbables">{{ cause }}</li>
+      </ul>
+    </div>
+
+    <div class="diagnostic-block">
+      <h4><i data-lucide="wrench" style="width:16px;height:16px"></i> Pièces à vérifier</h4>
+      <ul>
+        <li *ngFor="let piece of res.piecesAVerifier">{{ piece }}</li>
+      </ul>
+    </div>
+
+    <div class="diagnostic-block diagnostic-block--conseil">
+      <h4><i data-lucide="lightbulb" style="width:16px;height:16px"></i> Conseil</h4>
+      <p>{{ res.conseilGeneral }}</p>
+    </div>
+  </div>
+</div>

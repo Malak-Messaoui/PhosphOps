@@ -1,0 +1,36 @@
+<!-- not-found.component.html -->
+<div style="display:flex;flex-direction:column;align-items:center;
+            justify-content:center;height:100vh;text-align:center;
+            font-family:sans-serif;background:#000;color:#fff;">
+
+  <!-- Logo -->
+  <div style="font-size:1.8rem;font-weight:800;margin-bottom:2rem;">
+    Street<span style="color:#e63946;">League</span>
+  </div>
+
+  <!-- 404 -->
+  <h1 style="font-size:8rem;font-weight:800;color:#e63946;margin:0;
+             line-height:1;text-shadow:0 0 40px rgba(230,57,70,0.4);">
+    404
+  </h1>
+
+  <h2 style="font-size:1.5rem;font-weight:600;margin:1rem 0 0.5rem;">
+    Page Not Found
+  </h2>
+
+  <p style="color:#9ca3af;margin-bottom:2.5rem;max-width:320px;">
+    The page you're looking for doesn't exist or has been moved.
+  </p>
+
+  <!-- Bouton -->
+  <button (click)="goHome()"
+          style="background:#e63946;color:#fff;border:none;
+                 padding:0.85rem 2.5rem;border-radius:8px;
+                 font-size:1rem;font-weight:600;cursor:pointer;
+                 transition:opacity 0.2s;"
+          onmouseover="this.style.opacity='0.85'"
+          onmouseout="this.style.opacity='1'">
+ Go Home
+  </button>
+
+</div>

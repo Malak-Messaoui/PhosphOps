@@ -1,0 +1,13 @@
+.row-actions{display:flex;align-items:center;gap:8px}
+.row-actions{display:flex;align-items:center;gap:8px}
+
+.icon-action{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:#fff;transition:background .15s;
+}
+.icon-action svg{width:16px;height:16px}
+.icon-action--success{border:1.5px solid var(--color-success);color:var(--color-success)}
+.icon-action--success:hover{background:var(--color-success-bg)}
+.icon-action--danger{border:1.5px solid var(--color-danger);color:var(--color-danger)}
+.icon-action--danger:hover{background:var(--color-danger-bg)}

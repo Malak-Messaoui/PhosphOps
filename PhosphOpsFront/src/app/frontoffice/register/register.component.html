@@ -1,0 +1,115 @@
+<div class="auth-page">
+  <div class="auth-box">
+
+    <div class="auth-header">
+      <span class="logo logo--lg">CPG</span>
+      <h1 style="font-size:1.25rem">Créer un compte</h1>
+      <p>PhosphOps — Espace Technicien</p>
+    </div>
+
+    <div class="card">
+
+      <form [formGroup]="form" (ngSubmit)="soumettre()" novalidate>
+
+        <div class="field">
+          <label>Nom complet</label>
+          <input
+            class="input"
+            type="text"
+            formControlName="nom"
+            placeholder="Ahmed Benchekroun">
+        </div>
+
+        <div class="field">
+          <label>Matricule</label>
+          <input
+            class="input"
+            type="text"
+            formControlName="matricule"
+            placeholder="T-12345">
+        </div>
+
+        <div class="field">
+          <label>Email professionnel</label>
+          <input
+            class="input"
+            type="email"
+            formControlName="email"
+            placeholder="a.benchekroun@cpg.ma">
+        </div>
+
+        <div class="field">
+          <label>Téléphone</label>
+          <input
+            class="input"
+            type="text"
+            formControlName="telephone"
+            placeholder="+216 XX XXX XXX">
+        </div>
+
+        <div class="field">
+          <label>Site</label>
+          <input
+            class="input"
+            type="text"
+            formControlName="site"
+            placeholder="Gafsa, Métlaoui...">
+        </div>
+
+        <div class="field">
+          <label>Département</label>
+          <input
+            class="input"
+            type="text"
+            formControlName="departement"
+            placeholder="Maintenance, Production...">
+        </div>
+
+        <div class="field">
+          <label>Mot de passe</label>
+          <input
+            class="input"
+            type="password"
+            formControlName="password"
+            placeholder="••••••••">
+        </div>
+
+        <div class="field">
+          <label>Confirmer le mot de passe</label>
+          <input
+            class="input"
+            type="password"
+            formControlName="confirmPassword"
+            placeholder="••••••••">
+        </div>
+
+        <p
+          *ngIf="form.errors?.['motsDePasseDifferents'] && form.get('confirmPassword')?.touched"
+          style="color:var(--color-danger, #dc2626); font-size:0.85rem; margin-bottom:12px">
+          Les mots de passe ne correspondent pas
+        </p>
+
+        <p
+          *ngIf="erreur"
+          style="color:var(--color-danger, #dc2626); font-size:0.85rem; margin-bottom:12px">
+          {{ erreur }}
+        </p>
+
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          [disabled]="envoiEnCours">
+          {{ envoiEnCours ? 'Création en cours…' : 'Créer mon compte' }}
+        </button>
+
+      </form>
+
+    </div>
+
+    <p class="auth-footer">
+      Déjà inscrit ?
+      <a class="link-btn" routerLink="/login">Se connecter</a>
+    </p>
+
+  </div>
+</div>

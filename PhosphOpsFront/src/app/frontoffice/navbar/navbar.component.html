@@ -1,0 +1,33 @@
+<app-chatbot-widget></app-chatbot-widget>
+<header class="topnav">
+  <a class="topnav__brand" routerLink="/acceuil" style="color:#fff">
+    <span class="logo">CPG</span>
+    <span class="topnav__title">PhosphOps</span>
+  </a>
+  <div class="topnav__actions">
+   
+
+    <div class="avatar-dropdown">
+      <button class="avatar-btn" (click)="toggleDropdown()" aria-label="Mon profil">
+        {{ initiale }}
+      </button>
+<div class="avatar-dropdown__menu" *ngIf="dropdownOuvert">
+<button class="avatar-dropdown__item" (click)="allerProfil()">
+  <i data-lucide="user" style="width:15px;height:15px"></i>
+  <span>Profil</span>
+</button>
+  <button class="avatar-dropdown__item avatar-dropdown__item--danger" (click)="logout()">
+    <i data-lucide="log-out" style="width:15px;height:15px"></i>
+    <span>Déconnexion</span>
+  </button>
+</div>
+    </div>
+  </div>
+</header>
+<nav class="bottomnav" aria-label="Navigation principale">
+  <a routerLink="/acceuil" routerLinkActive="is-active"><i data-lucide="home"></i><span>Accueil</span></a>
+  <a routerLink="/list-equipements" routerLinkActive="is-active"><i data-lucide="wrench"></i><span>Équipements</span></a>
+  <a routerLink="/panne" routerLinkActive="is-active"><i data-lucide="triangle-alert"></i><span>Déclarer</span></a>
+  <a routerLink="/diagnostic" routerLinkActive="is-active"><i data-lucide="clipboard-list"></i><span>Diagnostic</span></a>
+  <a routerLink="/intervention" routerLinkActive="is-active"><i data-lucide="activity"></i><span>Interventions</span></a>
+</nav>

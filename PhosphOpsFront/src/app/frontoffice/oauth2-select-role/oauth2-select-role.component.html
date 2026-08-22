@@ -1,0 +1,55 @@
+<div class="auth-page">
+  <div class="auth-box">
+    <div class="auth-header">
+      <div class="auth-logo-wrap">
+        <img src="assets/shared/images/logo.svg" alt="PhosphOps Logo" class="auth-logo">
+      </div>
+      <h1>PhosphOps</h1>
+      <p>Complétez votre profil</p>
+    </div>
+
+    <div class="card">
+      <form [formGroup]="form" (ngSubmit)="soumettre()" novalidate>
+
+        <div class="field">
+          <label>Email</label>
+          <input class="input" formControlName="email" readonly>
+        </div>
+
+        <div class="field">
+          <label>Nom complet</label>
+          <input class="input" formControlName="nom">
+        </div>
+
+        <div class="field">
+          <label>Matricule</label>
+          <input class="input" formControlName="matricule">
+        </div>
+
+        <div class="field">
+          <label>Téléphone</label>
+          <input class="input" formControlName="telephone">
+        </div>
+
+        <div class="field">
+          <label>Site</label>
+          <input class="input" formControlName="site">
+        </div>
+
+        <div class="field">
+          <label>Département</label>
+          <input class="input" formControlName="departement">
+        </div>
+
+        <p *ngIf="erreur" style="color:var(--color-danger, #dc2626); font-size:0.85rem; margin-bottom:12px">
+          {{ erreur }}
+        </p>
+
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="envoiEnCours">
+          {{ envoiEnCours ? 'Enregistrement…' : 'Terminer l\'inscription' }}
+        </button>
+
+      </form>
+    </div>
+  </div>
+</div>

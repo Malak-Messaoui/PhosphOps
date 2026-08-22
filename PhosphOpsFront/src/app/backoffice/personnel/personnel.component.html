@@ -1,0 +1,129 @@
+<div class="admin-shell">
+  <div class="sidebar__overlay" [class.is-visible]="menuMobileOuvert()" (click)="fermerMenuMobile()"></div>
+
+  <app-menu [menuMobileOuvert]="menuMobileOuvert()"></app-menu>
+
+  <div class="main">
+    <app-header (toggleMenu)="toggleMenuMobile()"></app-header>
+
+    <main class="content">
+      <div class="page-head">
+        <div>
+          <h1>Gestion des utilisateurs</h1>
+          <p>{{ personnel().length }} utilisateurs enregistrés</p>
+        </div>
+        <button type="button" class="btn btn-primary" (click)="ouvrirModal()">
+          <i data-lucide="plus"></i>Ajouter un utilisateur
+        </button>
+      </div>
+
+      <div class="chip-row">
+        <button
+          type="button"
+          class="chip"
+          *ngFor="let f of filtres"
+          [class.is-active]="filtreRole() === f"
+          (click)="onFiltreChange(f)"
+        >
+          {{ f === 'tous' ? 'Tous' : f }}
+        </button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Utilisateur</th>
+                <th>Rôle</th>
+                <th>Matricule</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of personnelFiltre()">
+                <td>
+                  <div class="cell-user">
+                    <span class="av">{{ initiales(p.nom) }}</span>
+                    <div>
+                      <strong>{{ p.nom }}</strong>
+                      <small>{{ p.email }}</small>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge badge-role">{{ p.role }}</span></td>
+                <td>{{ p.matricule }}</td>
+                <!-- ===== ICI LES 3 ICONS : EYE / EDIT / TRASH ===== -->
+                <td>
+                  <div class="actions">
+                    <button type="button" aria-label="Consulter" (click)="consulter(p)">
+                      <i data-lucide="eye" class="text-info"></i>
+                    </button>
+                    <button type="button" aria-label="Modifier" (click)="modifier(p)">
+                      <i data-lucide="edit" class="text-info"></i>
+                    </button>
+                    <button type="button" aria-label="Supprimer" (click)="supprimer(p.id)">
+                      <i data-lucide="trash-2" class="text-danger"></i>
+                    </button>
+                  </div>
+                </td>
+                <!-- ================================================ -->
+              </tr>
+              <tr *ngIf="personnelFiltre().length === 0">
+                <td colspan="4" style="text-align:center; color:var(--color-muted-2); padding:24px">
+                  Aucun utilisateur ne correspond à cette recherche.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="modal-overlay" *ngIf="modalOuverte()" (click)="onOverlayClick($event)" (keydown.escape)="fermerModal()">
+        <div class="modal">
+          <div class="modal__head">
+            <h3>
+              {{ modeModal() === 'creation' ? 'Nouvel utilisateur'
+                 : modeModal() === 'edition' ? "Modifier l'utilisateur"
+                 : "Détails de l'utilisateur" }}
+            </h3>
+            <button type="button" (click)="fermerModal()" aria-label="Fermer"><i data-lucide="x"></i></button>
+          </div>
+          <form [formGroup]="form" (ngSubmit)="soumettre()" novalidate>
+            <div class="field">
+              <label>Nom complet</label>
+              <input class="input" formControlName="nom" placeholder="Prénom Nom" required />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input class="input" type="email" formControlName="email" placeholder="email@cpg.ma" required />
+            </div>
+            <div class="field">
+              <label>Matricule</label>
+              <input class="input" formControlName="matricule" placeholder="T-XXXXX" required />
+            </div>
+            <div class="field">
+              <label>Rôle</label>
+              <select class="select-full" formControlName="role">
+                <option *ngFor="let r of roles" [value]="r">{{ r }}</option>
+              </select>
+            </div>
+            <div class="modal__foot">
+              <button type="button" class="btn btn-outline" (click)="fermerModal()">
+                {{ modeModal() === 'consultation' ? 'Fermer' : 'Annuler' }}
+              </button>
+              <button
+                *ngIf="modeModal() !== 'consultation'"
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="envoiEnCours"
+              >
+                {{ envoiEnCours ? 'Enregistrement…' : (modeModal() === 'edition' ? 'Enregistrer' : "Créer l'utilisateur") }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<app-navbar></app-navbar>
+<main class="screen stack">
+  <div>
+    <h2 class="screen-title">Mes interventions</h2>
+    <p class="screen-subtitle">{{ interventions.length }} interventions assignées</p>
+  </div>
+
+  <div class="stack">
+    <div class="entry-card" *ngFor="let item of interventions" (click)="openDetail(item)">
+      <div class="row-top">
+        <div>
+          <strong>{{ item.nomEquipement }}</strong>
+          <div class="id">INT-{{ item.idIntervention }}</div>
+        </div>
+        <span class="badge" [ngClass]="badgeClassPriorite(item.priorite)">{{ item.priorite }}</span>
+      </div>
+      <div class="row-bottom">
+        <div class="left">
+          <span class="badge" [ngClass]="badgeClassStatut(item.status)">{{ item.status }}</span>
+          <span class="meta">{{ item.datePanne | date:'dd/MM/yy HH:mm' }}</span>
+        </div>
+        <span class="goto">Voir détail ›</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ===== MODAL DETAIL ===== -->
+<div class="modal-backdrop" *ngIf="selected" (click)="closeModal()">
+  <div class="modal-card" (click)="$event.stopPropagation()">
+    <div class="detail-head">
+      <div>
+        <h2>{{ selected.nomEquipement }}</h2>
+        <p class="sub">INT-{{ selected.idIntervention }}</p>
+      </div>
+      <span class="badge" [ngClass]="badgeClassPriorite(selected.priorite)">{{ selected.priorite }}</span>
+      <button class="close-btn" (click)="closeModal()">✕</button>
+    </div>
+
+    <div class="timer-box" *ngIf="selected.status === 'PLANIFIEE'">
+      <button type="button" class="btn btn-primary" (click)="demarrer()">
+        ▶ Démarrer l'intervention
+      </button>
+    </div>
+
+    <div class="field">
+      <label for="cr">Compte rendu</label>
+      <textarea class="textarea" id="cr" rows="4" [(ngModel)]="compteRendu"
+                placeholder="Décrivez les actions effectuées…"
+                [disabled]="selected.status === 'TERMINEE'"></textarea>
+    </div>
+
+    <div class="field">
+      <label>Pièces utilisées</label>
+      <div class="parts-list">
+        <div class="parts-list__search">
+          <input type="search" [(ngModel)]="pieceQuery" (ngModelChange)="onPieceSearch()"
+                 placeholder="Rechercher une pièce…" [disabled]="selected.status === 'TERMINEE'">
+        </div>
+        <div class="parts-list__row" *ngFor="let p of suggestions">
+          <div><p class="name">{{ p.nom }}</p><p class="ref">{{ p.reference }}</p></div>
+          <button type="button" (click)="ajouterPiece(p)">+</button>
+        </div>
+      </div>
+
+      <div class="parts-added" *ngIf="piecesAjoutees.length > 0">
+        <div class="parts-list__row" *ngFor="let p of piecesAjoutees">
+          <div><p class="name">{{ p.nom }}</p><p class="ref">{{ p.reference }} × {{ p.quantite }}</p></div>
+          <button type="button" (click)="retirerPiece(p.idPiece)" *ngIf="selected.status !== 'TERMINEE'">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-block btn-success" (click)="cloturer()"
+            *ngIf="selected.status === 'EN_COURS'">
+      Clôturer l'intervention
+    </button>
+  </div>
+</div>
