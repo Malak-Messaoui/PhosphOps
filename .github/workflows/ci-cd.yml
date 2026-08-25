@@ -47,6 +47,15 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          for i in {1..15}; do
+            pg_isready -h localhost -p 5432 -U postgres && echo "Postgres is up" && exit 0
+            echo "Waiting for Postgres... ($i)"
+            sleep 2
+          done
+          echo "Postgres never became ready" && exit 1
+
       - name: Build with Maven (skip tests d'abord pour compiler)
         run: mvn -B clean compile
 
