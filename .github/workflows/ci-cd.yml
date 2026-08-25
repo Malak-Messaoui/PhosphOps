@@ -8,9 +8,8 @@ on:
     branches: [main, develop]
 
 env:
-  REGISTRY: ghcr.io
-  BACKEND_IMAGE: ${{ github.repository }}/phosphops-backend
-  FRONTEND_IMAGE: ${{ github.repository }}/phosphops-frontend
+  BACKEND_IMAGE: malakmessawi/phosphops-backend
+  FRONTEND_IMAGE: malakmessawi/phosphops-frontend
 
 jobs:
   # ─────────────────────────────────────────────
@@ -125,7 +124,7 @@ jobs:
           retention-days: 5
 
   # ─────────────────────────────────────────────
-  # JOB 3 — Docker : build + push images (ghcr.io)
+  # JOB 3 — Docker : build + push images (Docker Hub)
   # Ne tourne que sur push vers main (pas sur PR)
   # ─────────────────────────────────────────────
   docker-build-push:
@@ -133,9 +132,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [backend-build, frontend-build]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    permissions:
-      contents: read
-      packages: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -143,18 +139,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to GitHub Container Registry
+      - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Extract metadata (backend)
         id: meta-backend
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}
+          images: ${{ env.BACKEND_IMAGE }}
           tags: |
             type=sha,format=short
             type=raw,value=latest
@@ -173,7 +168,7 @@ jobs:
         id: meta-frontend
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}
+          images: ${{ env.FRONTEND_IMAGE }}
           tags: |
             type=sha,format=short
             type=raw,value=latest
