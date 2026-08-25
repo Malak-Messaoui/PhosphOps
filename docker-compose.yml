@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # ============================
+  # PostgreSQL Database
+  # ============================
+  postgres:
+    image: postgres:16-alpine
+    container_name: phosphops-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: phosphopsdb
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      APP_CORS_ALLOWED-ORIGINS: http://localhost,http://localhost:4200
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ============================
+  # Spring Boot Backend
+  # ============================
+  backend:
+    build:
+      context: ./PhosphOps
+      dockerfile: Dockerfile
+    container_name: phosphops-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      # Connexion à la base (le hostname "postgres" = nom du service ci-dessus)
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/phosphopsdb
+      SPRING_DATASOURCE_USERNAME: ${DB_USER:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-postgres}
+
+      # JWT
+      JWT_SECRET: ${JWT_SECRET}
+
+      # Google OAuth2
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+
+      # Cloudinary
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET}
+
+      # Gemini API
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      - "8087:8087"
+
+  # ============================
+  # Angular Frontend
+  # ============================
+  frontend:
+    build:
+      context: ./PhosphOpsFront
+      dockerfile: Dockerfile
+    container_name: phosphops-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  postgres_data:

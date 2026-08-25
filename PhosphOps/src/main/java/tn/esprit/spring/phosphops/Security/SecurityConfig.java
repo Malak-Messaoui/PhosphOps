@@ -3,6 +3,7 @@ package tn.esprit.spring.phosphops.Security;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -24,6 +25,7 @@ import tn.esprit.spring.phosphops.Repository.UserRepository;
 import tn.esprit.spring.phosphops.Security.jwt.JwtAuthFilter;
 import tn.esprit.spring.phosphops.Security.jwt.JwtService;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -98,11 +100,13 @@ public class SecurityConfig {
 
         return http.build();
     }
+    @Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost:4201"));
+        config.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

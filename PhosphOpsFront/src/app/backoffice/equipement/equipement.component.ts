@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { Equipement, EtatEquipement } from '../../models/equipement.model';
 import { EquipementService } from '../../services/equipement.service';
 import { MenuComponent } from '../menu/menu.component';
 import { HeaderComponent } from '../header/header.component';
-
-declare const lucide: any;
+import { LucidePlus, LucideEye, LucidePencil, LucideTrash2, LucideX } from '@lucide/angular';
 
 @Component({
   selector: 'app-equipements',
@@ -16,12 +15,17 @@ declare const lucide: any;
     ReactiveFormsModule,
     FormsModule,
     MenuComponent,
-    HeaderComponent
+    HeaderComponent,
+    LucidePlus,
+    LucideEye,
+    LucidePencil,
+    LucideTrash2,
+    LucideX,
   ],
   templateUrl: './equipement.component.html',
   styleUrls: ['./equipement.component.css']
 })
-export class EquipementComponent implements OnInit, AfterViewInit {
+export class EquipementComponent implements OnInit {
 
   menuMobileOuvert = signal(false);
 
@@ -88,18 +92,6 @@ export class EquipementComponent implements OnInit, AfterViewInit {
   }
 
 
-  // Une seule fois après le premier rendu — évite la boucle infinie
-  // de requestAnimationFrame causée par ngAfterViewChecked
-  ngAfterViewInit(): void {
-
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
-
-  }
-
-
-
   loadEquipements(): void {
 
     this.equipementService.getAll()
@@ -109,11 +101,6 @@ export class EquipementComponent implements OnInit, AfterViewInit {
 
           this.equipements = data;
           this.filteredEquipements = data;
-
-          // Ré-invoque lucide après le chargement (nouvelles icônes via *ngFor)
-          if (typeof lucide !== 'undefined') {
-            setTimeout(() => lucide.createIcons(), 0);
-          }
 
         },
 

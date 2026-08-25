@@ -34,7 +34,7 @@
           class="btn btn-primary"
           (click)="openAddModal()">
 
-          <i data-lucide="plus"></i>
+          <svg lucidePlus></svg>
           Ajouter
 
         </button>
@@ -117,10 +117,10 @@
       aria-label="Consulter"
       (click)="consulter(eq)">
 
-      <i 
-        data-lucide="eye"
+      <svg 
+        lucideEye
         class="text-info">
-      </i>
+      </svg>
 
     </button>
 
@@ -131,10 +131,10 @@
       aria-label="Modifier"
       (click)="openEditModal(eq)">
 
-      <i 
-        data-lucide="edit"
+      <svg 
+        lucidePencil
         class="text-info">
-      </i>
+      </svg>
 
     </button>
 
@@ -145,10 +145,10 @@
       aria-label="Supprimer"
       (click)="onDelete(eq.idEquipement)">
 
-      <i 
-        data-lucide="trash-2"
+      <svg 
+        lucideTrash2
         class="text-danger">
-      </i>
+      </svg>
 
     </button>
 
@@ -215,7 +215,7 @@
               type="button"
               (click)="closeModal()">
 
-              <i data-lucide="x"></i>
+              <svg lucideX></svg>
 
             </button>
 
@@ -396,7 +396,7 @@
 type="button"
 (click)="closeViewModal()">
 
-<i data-lucide="x"></i>
+<svg lucideX></svg>
 
 </button>
 
