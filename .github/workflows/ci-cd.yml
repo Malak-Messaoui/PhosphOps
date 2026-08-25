@@ -1,0 +1,170 @@
+name: PhosphOps CI/CD
+
+# Se déclenche sur push/PR vers main et develop
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+env:
+  REGISTRY: ghcr.io
+  BACKEND_IMAGE: ${{ github.repository }}/phosphops-backend
+  FRONTEND_IMAGE: ${{ github.repository }}/phosphops-frontend
+
+jobs:
+  # ─────────────────────────────────────────────
+  # JOB 1 — Backend : build + tests (Spring Boot / Maven)
+  # ─────────────────────────────────────────────
+  backend-build:
+    name: Backend - Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./PhosphOps
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build with Maven (skip tests d'abord pour compiler)
+        run: mvn -B clean compile
+
+      - name: Run tests
+        run: mvn -B test
+
+      - name: Package (jar)
+        if: github.ref == 'refs/heads/main'
+        run: mvn -B package -DskipTests
+
+      - name: Upload jar artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: PhosphOps/target/*.jar
+          retention-days: 5
+
+  # ─────────────────────────────────────────────
+  # JOB 2 — Frontend : build + tests (Angular)
+  # ─────────────────────────────────────────────
+  frontend-build:
+    name: Frontend - Build & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./PhosphOpsFront
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: PhosphOpsFront/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint --if-present
+
+      - name: Run unit tests (headless)
+        run: npm run test -- --watch=false --browsers=ChromeHeadless --if-present
+
+      - name: Build (production)
+        run: npm run build -- --configuration=production
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: PhosphOpsFront/dist/
+          retention-days: 5
+
+  # ─────────────────────────────────────────────
+  # JOB 3 — Docker : build + push images (ghcr.io)
+  # Ne tourne que sur push vers main (pas sur PR)
+  # ─────────────────────────────────────────────
+  docker-build-push:
+    name: Docker - Build & Push Images
+    runs-on: ubuntu-latest
+    needs: [backend-build, frontend-build]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (backend)
+        id: meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}
+          tags: |
+            type=sha,format=short
+            type=raw,value=latest
+
+      - name: Build & push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./PhosphOps
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Extract metadata (frontend)
+        id: meta-frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}
+          tags: |
+            type=sha,format=short
+            type=raw,value=latest
+
+      - name: Build & push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./PhosphOpsFront
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          labels: ${{ steps.meta-frontend.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ─────────────────────────────────────────────
+  # JOB 4 — Deploy (placeholder — kammel 7asb serveur mte3ek)
+  # ─────────────────────────────────────────────
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: docker-build-push
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy step (à personnaliser)
+        run: |
+          echo "Ajoute ici le déploiement réel : SSH vers ton serveur,"
+          echo "docker compose pull && docker compose up -d,"
+          echo "ou un service (Render, Railway, VPS, etc.)"

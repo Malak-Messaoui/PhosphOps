@@ -4,8 +4,9 @@
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)
-![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=jenkins&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white)
+
+[![CI/CD](https://github.com/Malak-Messaoui/PhosphOps/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Malak-Messaoui/PhosphOps/actions/workflows/ci-cd.yml)
 
 > A full-stack industrial maintenance and production monitoring platform for CPG.
 
@@ -25,7 +26,7 @@ PhosphOps is a unified industrial maintenance management platform built for CPG 
 | Backend | Spring Boot, Java |
 | Database | PostgreSQL |
 | Auth | Spring Security, JWT, BCrypt |
-| DevOps | Docker, Jenkins, Kubernetes |
+| DevOps | Docker, GitHub Actions (CI/CD), GitHub Container Registry |
 | Monitoring | Prometheus, Grafana |
 
 ---
@@ -39,6 +40,19 @@ PhosphOps is a unified industrial maintenance management platform built for CPG 
 
 ---
 
+## CI/CD
+
+This project uses **GitHub Actions** for continuous integration and deployment. The pipeline runs automatically on every push or pull request to `main` and `develop`:
+
+- **Backend** — Maven build, unit tests, `.jar` packaging
+- **Frontend** — dependency install, lint, headless unit tests, production Angular build
+- **Docker** — backend/frontend images built and pushed to GitHub Container Registry (`ghcr.io`) on every merge to `main`
+- **Deploy** — automated deployment (to be configured for the target environment)
+
+Workflow definition: [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml)
+
+---
+
 ## Getting Started
 
 ```bash
@@ -46,11 +60,11 @@ PhosphOps is a unified industrial maintenance management platform built for CPG 
 git clone https://github.com/Malak-Messaoui/PhosphOps.git
 
 # Backend
-cd backend
+cd PhosphOps
 ./mvnw spring-boot:run
 
 # Frontend
-cd frontend
+cd PhosphOpsFront
 npm install
 ng serve
 ```
@@ -59,4 +73,4 @@ ng serve
 
 ## Author
 
-**Malika Messaoui** — ESPRIT School of Engineering
+**Malak Messaoui** — ESPRIT School of Engineering
