@@ -111,8 +111,7 @@ jobs:
         run: npm run lint --if-present
 
       - name: Run unit tests (headless)
-        run: npm run test -- --watch=false --browsers=ChromeHeadless --if-present
-
+        run: npm run test --if-present -- --watch=false --browsers=ChromeHeadless
       - name: Build (production)
         run: npm run build -- --configuration=production
 
