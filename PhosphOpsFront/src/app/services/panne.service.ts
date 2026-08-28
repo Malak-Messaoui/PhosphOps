@@ -24,7 +24,7 @@ export interface PanneResponse {
 })
 export class PanneService {
 
-  private readonly apiUrl = 'http://localhost:8087/PhosphOps/api/pannes';
+  private readonly apiUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/pannes';
 
   constructor(private http: HttpClient) {}
 

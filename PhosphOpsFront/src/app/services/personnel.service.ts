@@ -6,7 +6,7 @@ import { Personnel, PersonnelCreate, PersonnelUpdate } from '../models/personnel
 
 @Injectable({ providedIn: 'root' })
 export class PersonnelService {
-  private readonly baseUrl = 'http://localhost:8087/PhosphOps/api/personnels';
+  private readonly baseUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/personnels';
 
   constructor(private http: HttpClient) {}
 

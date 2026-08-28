@@ -10,7 +10,7 @@ import { User } from '../models/user.model';
 export class ProfileService {
 
 
-  private apiUrl = 'http://localhost:8087/PhosphOps/api/users';
+  private apiUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/users';
 
 
   constructor(

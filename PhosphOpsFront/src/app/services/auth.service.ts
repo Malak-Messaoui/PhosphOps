@@ -18,7 +18,7 @@ export class AuthService {
 
 
   private readonly authUrl =
-  'http://localhost:8087/PhosphOps/auth/login';
+  'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/auth/login';
 
 
   private readonly tokenKey =
@@ -174,7 +174,7 @@ register(payload: {
 
   return this.http
     .post<LoginResponse>(
-      'http://localhost:8087/PhosphOps/auth/register',
+      'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/auth/register',
       payload
     )
     .pipe(
@@ -198,7 +198,7 @@ register(payload: {
 }
 
 loginWithGoogle() {
-  window.location.href = 'http://localhost:8087/PhosphOps/oauth2/authorization/google';
+  window.location.href = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/oauth2/authorization/google';
 }
 
 storeSession(token: string, id: number, email: string, name: string, role: string) {
@@ -209,7 +209,7 @@ storeSession(token: string, id: number, email: string, name: string, role: strin
 
 forgotPassword(payload: { email: string; newPassword: string }): Observable<any> {
   return this.http.post<any>(
-    'http://localhost:8087/PhosphOps/auth/forgot-password',
+    'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/auth/forgot-password',
     payload
   );
 }
@@ -223,7 +223,7 @@ completeOAuthRegistration(payload: {
   departement: string;
 }): Observable<LoginResponse> {
   return this.http
-    .post<LoginResponse>('http://localhost:8087/PhosphOps/auth/oauth2-complete', payload)
+    .post<LoginResponse>('https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/auth/oauth2-complete', payload)
     .pipe(
       tap((res) => {
         this.storeSession(res.token, res.id, res.email, res.name ?? res.email.split('@')[0], res.role);

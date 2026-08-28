@@ -5,7 +5,7 @@ import { InterventionListItem, InterventionDetail, Piece } from '../models/inter
 
 @Injectable({ providedIn: 'root' })
 export class InterventionService {
-  private baseUrl = 'http://localhost:8087/PhosphOps';
+  private baseUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps';
 
   constructor(private http: HttpClient) {}
 

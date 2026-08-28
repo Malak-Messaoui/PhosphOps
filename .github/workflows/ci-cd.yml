@@ -116,11 +116,17 @@ jobs:
       - name: Build (production)
         run: npm run build -- --configuration=production
 
+      - name: Prepare deploy package
+        run: |
+          mkdir deploy-package
+          cp -r dist/phosph-ops-front/browser/* deploy-package/
+          cp package.json deploy-package/
+
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
         with:
           name: frontend-dist
-          path: PhosphOpsFront/dist/
+          path: PhosphOpsFront/deploy-package/
           retention-days: 5
 
   # ─────────────────────────────────────────────
@@ -184,16 +190,23 @@ jobs:
           cache-to: type=gha,mode=max
 
   # ─────────────────────────────────────────────
-  # JOB 4 — Deploy (placeholder — kammel 7asb serveur mte3ek)
+  # JOB 4 — Deploy Frontend to Azure App Service
   # ─────────────────────────────────────────────
-  deploy:
-    name: Deploy
+  deploy-frontend:
+    name: Deploy Frontend to Azure
     runs-on: ubuntu-latest
-    needs: docker-build-push
+    needs: frontend-build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      - name: Deploy step (à personnaliser)
-        run: |
-          echo "Ajoute ici le déploiement réel : SSH vers ton serveur,"
-          echo "docker compose pull && docker compose up -d,"
-          echo "ou un service (Render, Railway, VPS, etc.)"
+      - name: Download frontend build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: ./frontend-dist
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: phosphopsfrontend
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND }}
+          package: ./frontend-dist

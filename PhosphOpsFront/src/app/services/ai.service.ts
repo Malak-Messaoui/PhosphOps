@@ -14,7 +14,7 @@ export interface DiagnosticResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AiService {
-  private baseUrl = 'http://localhost:8087/PhosphOps/ai';
+  private baseUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/ai';
 
   constructor(private http: HttpClient) {}
 

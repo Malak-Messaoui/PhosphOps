@@ -28,8 +28,8 @@ export interface Technicien {
 })
 export class DemandeService {
 
-  private readonly apiUrl = 'http://localhost:8087/PhosphOps/api/demandes';
-  private readonly usersUrl = 'http://localhost:8087/PhosphOps/api/users';
+  private readonly apiUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/demandes';
+  private readonly usersUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/users';
 
   constructor(private http: HttpClient) {}
 

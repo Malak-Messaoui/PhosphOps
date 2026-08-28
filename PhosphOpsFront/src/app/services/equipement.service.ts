@@ -8,7 +8,7 @@ import { Equipement } from '../models/equipement.model';
 })
 export class EquipementService {
 
-private readonly apiUrl = 'http://localhost:8087/PhosphOps/api/equipements';
+private readonly apiUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/equipements';
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Equipement[]> {
