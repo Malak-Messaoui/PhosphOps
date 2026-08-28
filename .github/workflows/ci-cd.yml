@@ -120,7 +120,19 @@ jobs:
         run: |
           mkdir deploy-package
           cp -r dist/phosph-ops-front/browser/* deploy-package/
-          cp package.json deploy-package/
+          cat > deploy-package/package.json << 'EOF'
+          {
+            "name": "phosph-ops-front-runtime",
+            "version": "1.0.0",
+            "private": true,
+            "scripts": {
+              "start": "serve -s . -l $PORT"
+            },
+            "dependencies": {
+              "serve": "^14.2.6"
+            }
+          }
+          EOF
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
