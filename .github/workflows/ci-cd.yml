@@ -133,6 +133,7 @@ jobs:
             }
           }
           EOF
+          cd deploy-package && npm install --omit=dev
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4
