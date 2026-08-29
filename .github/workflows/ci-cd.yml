@@ -126,7 +126,7 @@ jobs:
             "version": "1.0.0",
             "private": true,
             "scripts": {
-              "start": "./node_modules/.bin/serve -s . -l $PORT"
+            "start": "node node_modules/serve/build/main.js -s . -l $PORT"
             },
             "dependencies": {
               "serve": "^14.2.6"
@@ -222,4 +222,4 @@ jobs:
         with:
           app-name: phosphopsfrontend
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_FRONTEND }}
-          package: ./frontend-dist
+          package: ./frontend-distcd ..
