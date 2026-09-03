@@ -2,8 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
-
-declare const lucide: any;
+import { createIcons, icons } from 'lucide';
 
 @Component({
   selector: 'app-root',
@@ -20,16 +19,12 @@ export class AppComponent implements AfterViewInit {
       .subscribe(() => {
         // setTimeout(0) laisse Angular finir de peindre le nouveau DOM avant de générer les icônes
         setTimeout(() => {
-          if (typeof lucide !== 'undefined') {
-            lucide.createIcons();
-          }
+          createIcons({ icons });
         }, 0);
       });
   }
 
   ngAfterViewInit(): void {
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
+    createIcons({ icons });
   }
 }
