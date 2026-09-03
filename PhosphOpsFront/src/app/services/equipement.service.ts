@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Equipement } from '../models/equipement.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EquipementService {
 
-private readonly apiUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/equipements';
+  private readonly apiUrl = `${environment.apiUrl}/api/equipements`;
+
   constructor(private http: HttpClient) {}
 
   getAll(): Observable<Equipement[]> {

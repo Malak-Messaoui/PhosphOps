@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { InterventionListItem, InterventionDetail, Piece } from '../models/intervention.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class InterventionService {
-  private baseUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps';
+  private baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 

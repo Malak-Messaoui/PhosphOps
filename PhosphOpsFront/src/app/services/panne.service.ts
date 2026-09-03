@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface PanneRequest {
   typePanne: string;
@@ -24,7 +25,7 @@ export interface PanneResponse {
 })
 export class PanneService {
 
-  private readonly apiUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/pannes';
+  private readonly apiUrl = `${environment.apiUrl}/api/pannes`;
 
   constructor(private http: HttpClient) {}
 

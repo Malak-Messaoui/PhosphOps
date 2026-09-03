@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface DemandeMaintenance {
   idDemande: number;
@@ -28,8 +29,8 @@ export interface Technicien {
 })
 export class DemandeService {
 
-  private readonly apiUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/demandes';
-  private readonly usersUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/users';
+  private readonly apiUrl = `${environment.apiUrl}/api/demandes`;
+  private readonly usersUrl = `${environment.apiUrl}/api/users`;
 
   constructor(private http: HttpClient) {}
 

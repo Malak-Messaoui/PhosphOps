@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface ChatResponse {
   reponse: string;
@@ -14,7 +15,7 @@ export interface DiagnosticResponse {
 
 @Injectable({ providedIn: 'root' })
 export class AiService {
-  private baseUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/ai';
+  private baseUrl = `${environment.apiUrl}/ai`;
 
   constructor(private http: HttpClient) {}
 

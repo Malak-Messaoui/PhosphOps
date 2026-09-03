@@ -3,10 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Personnel, PersonnelCreate, PersonnelUpdate } from '../models/personnel.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class PersonnelService {
-  private readonly baseUrl = 'https://phosphopsbackend-bac3czavgtbea6aw.swedencentral-01.azurewebsites.net/PhosphOps/api/personnels';
+  private readonly baseUrl = `${environment.apiUrl}/api/personnels`;
 
   constructor(private http: HttpClient) {}
 
