@@ -113,3 +113,27 @@
 .modal-close:hover {
   color: #374151;
 }
+.topnav__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-logo-wrap {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  background: #fff;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.navbar-logo {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  display: block;
+}
