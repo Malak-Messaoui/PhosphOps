@@ -17,6 +17,7 @@ public class OAuth2AuthSuccessHandler implements AuthenticationSuccessHandler {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final String frontendUrl;
 
     @Override
     public void onAuthenticationSuccess(
@@ -36,8 +37,7 @@ public class OAuth2AuthSuccessHandler implements AuthenticationSuccessHandler {
 
             // Bloquer les ADMIN — ils doivent utiliser /admin-login
             if (user.getRole() == Role.ADMIN) {
-                String redirectUrl =
-                        "http://localhost:4200/login?error=admin_google_blocked";
+                String redirectUrl = frontendUrl + "/login?error=admin_google_blocked";
                 response.sendRedirect(redirectUrl);
                 return;
             }
@@ -45,16 +45,16 @@ public class OAuth2AuthSuccessHandler implements AuthenticationSuccessHandler {
             String token = generateJwt(user);
 
             String redirectUrl = String.format(
-                    "http://localhost:4200/oauth2/callback?token=%s&email=%s&role=ROLE_%s&id=%d",
-                    token, user.getEmail(), user.getRole().name(), user.getIdUser()
+                    "%s/oauth2/callback?token=%s&email=%s&role=ROLE_%s&id=%d",
+                    frontendUrl, token, user.getEmail(), user.getRole().name(), user.getIdUser()
             );
             response.sendRedirect(redirectUrl);
 
         } else {
             // Nouvel utilisateur → toujours redirigé vers select-role (deviendra TECHNICIEN)
             String redirectUrl = String.format(
-                    "http://localhost:4200/oauth2/select-role?email=%s&name=%s",
-                    email, fullName != null ? fullName : "Google User"
+                    "%s/oauth2/select-role?email=%s&name=%s",
+                    frontendUrl, email, fullName != null ? fullName : "Google User"
             );
             response.sendRedirect(redirectUrl);
         }
