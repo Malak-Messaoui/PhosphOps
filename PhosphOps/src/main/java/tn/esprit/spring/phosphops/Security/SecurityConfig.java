@@ -34,16 +34,25 @@ import java.util.List;
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
-    private final CustomOAuth2UserService customOAuth2UserService; // <-- AJOUTÉ, c'est lui qui manquait
+    private final CustomOAuth2UserService customOAuth2UserService;
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthFilter jwtAuthFilter;
     private final UserRepository userRepository;
     private final JwtService jwtService;
 
+    @Value("${app.cors.allowed-origins}")
+    private String allowedOrigins;
+
+    @Value("${app.frontend.url}")
+    private String frontendUrl;
+
     @Bean
     public DaoAuthenticationProvider authProvider() {
-        DaoAuthenticationProvider p = new DaoAuthenticationProvider(userDetailsService);
+        DaoAuthenticationProvider p =
+                new DaoAuthenticationProvider(userDetailsService);
+
         p.setPasswordEncoder(passwordEncoder);
+
         return p;
     }
 
@@ -53,7 +62,6 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // <-- AJOUTÉ : bean pour ton successHandler, construit avec les deps déjà dispo dans SecurityConfig
     @Bean
     public AuthenticationSuccessHandler oAuth2AuthSuccessHandler() {
         return new OAuth2AuthSuccessHandler(userRepository, jwtService);
@@ -62,56 +70,147 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
-            @Qualifier("authProvider") DaoAuthenticationProvider daoAuthProvider,
-            AuthenticationSuccessHandler oAuth2AuthSuccessHandler // <-- injecté ici
+            @Qualifier("authProvider")
+            DaoAuthenticationProvider daoAuthProvider,
+            AuthenticationSuccessHandler oAuth2AuthSuccessHandler
     ) throws Exception {
+
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors ->
+                        cors.configurationSource(corsConfigurationSource())
+                )
                 .csrf(AbstractHttpConfigurer::disable)
+
                 .authenticationProvider(daoAuthProvider)
+
                 .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.IF_REQUIRED
+                        )
+                )
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/personnels", "/api/personnels/**").permitAll()
-                        .requestMatchers("/api/equipements/**").permitAll()
-                        .requestMatchers("/api/users/**").hasAnyRole("ADMIN", "USER", "TECHNICIEN")
-                        .requestMatchers("/api/demandes/**").hasAnyRole("ADMIN", "TECHNICIEN")
-                        .requestMatchers("/ai/**").permitAll()
-                        .anyRequest().authenticated()
+
+                        .requestMatchers(HttpMethod.OPTIONS, "/**")
+                        .permitAll()
+
+                        .requestMatchers("/auth/**")
+                        .permitAll()
+
+                        .requestMatchers(
+                                "/oauth2/**",
+                                "/login/oauth2/**"
+                        )
+                        .permitAll()
+
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/personnels",
+                                "/api/personnels/**"
+                        )
+                        .permitAll()
+
+                        .requestMatchers("/api/equipements/**")
+                        .permitAll()
+
+                        .requestMatchers("/api/users/**")
+                        .hasAnyRole("ADMIN", "USER", "TECHNICIEN")
+
+                        .requestMatchers("/api/demandes/**")
+                        .hasAnyRole("ADMIN", "TECHNICIEN")
+
+                        .requestMatchers("/ai/**")
+                        .permitAll()
+
+                        .anyRequest()
+                        .authenticated()
                 )
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.setContentType("application/json");
-                            response.getWriter().write("{\"error\": \"Unauthorized\"}");
-                        })
+
+                .exceptionHandling(ex ->
+                        ex.authenticationEntryPoint(
+                                (request, response, authException) -> {
+
+                                    response.setStatus(
+                                            HttpServletResponse.SC_UNAUTHORIZED
+                                    );
+
+                                    response.setContentType(
+                                            "application/json"
+                                    );
+
+                                    response.getWriter().write(
+                                            "{\"error\": \"Unauthorized\"}"
+                                    );
+                                }
+                        )
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .addFilterBefore(
+                        jwtAuthFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                )
+
                 .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
-                        .successHandler(oAuth2AuthSuccessHandler) // <-- BRANCHÉ, manquait totalement avant
-                        .failureHandler((request, response, exception) -> {
-                            response.sendRedirect("http://localhost:4200/login?error=" + exception.getMessage());
-                        })
+
+                        .userInfoEndpoint(userInfo ->
+                                userInfo.userService(
+                                        customOAuth2UserService
+                                )
+                        )
+
+                        .successHandler(oAuth2AuthSuccessHandler)
+
+                        .failureHandler(
+                                (request, response, exception) -> {
+                                    response.sendRedirect(
+                                            frontendUrl
+                                                    + "/login?error="
+                                                    + exception.getMessage()
+                                    );
+                                }
+                        )
                 );
 
         return http.build();
     }
-    @Value("${app.cors.allowed-origins}")
-    private String allowedOrigins;
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+
+        CorsConfiguration configuration =
+                new CorsConfiguration();
+
+        configuration.setAllowedOrigins(
+                Arrays.stream(allowedOrigins.split(","))
+                        .map(String::trim)
+                        .toList()
+        );
+
+        configuration.setAllowedMethods(
+                List.of(
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE",
+                        "OPTIONS"
+                )
+        );
+
+        configuration.setAllowedHeaders(
+                List.of("*")
+        );
+
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source =
+                new UrlBasedCorsConfigurationSource();
+
+        source.registerCorsConfiguration(
+                "/**",
+                configuration
+        );
+
         return source;
     }
+
 }
