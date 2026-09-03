@@ -83,7 +83,7 @@ export class RegisterComponent {
 
         next: () => {
           this.envoiEnCours = false;
-          this.router.navigateByUrl('/home');
+          this.router.navigateByUrl('/acceuil');
         },
 
         error: (err) => {
