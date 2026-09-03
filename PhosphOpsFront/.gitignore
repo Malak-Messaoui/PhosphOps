@@ -55,7 +55,6 @@ yarn-error.log
 # Environment
 .env
 .env.local
-src/environments/environment.prod.ts
 
 # IDEs and editors
 .idea/
