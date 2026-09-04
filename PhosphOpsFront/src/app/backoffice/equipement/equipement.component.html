@@ -384,7 +384,7 @@
 
       </div>
 
-<div class="modal-overlay" *ngIf="isViewMode">
+<div class="modal-overlay" *ngIf="isViewMode && selectedEquipement as eq">
 
 <div class="modal">
 
@@ -405,19 +405,19 @@ type="button"
 
 <div class="field">
 <label>Matricule</label>
-<p>{{selectedEquipement?.matriculeEquipement}}</p>
+<p>{{eq.matriculeEquipement}}</p>
 </div>
 
 
 <div class="field">
 <label>Date achat</label>
-<p>{{selectedEquipement?.dateAchatEquipement | date:'yyyy-MM-dd'}}</p>
+<p>{{eq.dateAchatEquipement | date:'yyyy-MM-dd'}}</p>
 </div>
 
 
 <div class="field">
 <label>Catégorie</label>
-<p>{{selectedEquipement?.categorieEquipement}}</p>
+<p>{{eq.categorieEquipement}}</p>
 </div>
 
 
@@ -427,9 +427,9 @@ type="button"
 
 <span 
 class="badge"
-[class]="badgeClass(selectedEquipement!.etatEquipement)">
+[ngClass]="badgeClass(eq.etatEquipement)">
 
-{{selectedEquipement?.etatEquipement}}
+{{eq.etatEquipement}}
 
 </span>
 
