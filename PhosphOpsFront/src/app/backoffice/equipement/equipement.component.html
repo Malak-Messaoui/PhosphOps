@@ -1,169 +1,242 @@
 <div class="admin-shell">
 
-  <div 
-    class="sidebar__overlay" 
-    [class.is-visible]="menuMobileOuvert()" 
+  <!-- =========================
+       OVERLAY MENU MOBILE
+  ========================= -->
+
+  <div
+    class="sidebar__overlay"
+    [class.is-visible]="menuMobileOuvert()"
     (click)="fermerMenuMobile()">
   </div>
 
-  <app-menu [menuMobileOuvert]="menuMobileOuvert()"></app-menu>
 
+  <!-- =========================
+       SIDEBAR
+  ========================= -->
+
+  <app-menu
+    [menuMobileOuvert]="menuMobileOuvert()">
+  </app-menu>
+
+
+  <!-- =========================
+       MAIN
+  ========================= -->
 
   <div class="main">
 
-  <app-header (toggleMenu)="toggleMenuMobile()"></app-header>
-
+    <app-header
+      (toggleMenu)="toggleMenuMobile()">
+    </app-header>
 
 
     <main class="content">
 
 
+      <!-- =========================
+           HEADER PAGE
+      ========================= -->
+
       <div class="page-head">
 
         <div>
-          <h1>Gestion des équipements</h1>
+
+          <h1>
+            Gestion des équipements
+          </h1>
 
           <p>
-            {{equipements.length}} équipements enregistrés
+            {{ equipements.length }}
+            équipements enregistrés
           </p>
+
         </div>
 
 
-        <button 
+        <button
           type="button"
           class="btn btn-primary"
           (click)="openAddModal()">
 
           <svg lucidePlus></svg>
+
           Ajouter
 
         </button>
 
+      </div>
+
+
+      <!-- ========================
+           RECHERCHE
+      ========================= -->
+
+      <div class="search-container">
 
       </div>
 
 
-
+      <!-- =========================
+           TABLE
+      ========================= -->
 
       <div class="table-card">
 
-
         <div class="table-scroll">
 
-
           <table>
-
 
             <thead>
 
               <tr>
-                <th>Code</th>
-                <th>Date achat</th>
-                <th>Catégorie</th>
-                <th>Etat</th>
-                <th>Actions</th>
+
+                <th>
+                  Code
+                </th>
+
+                <th>
+                  Date achat
+                </th>
+
+                <th>
+                  Catégorie
+                </th>
+
+                <th>
+                  Etat
+                </th>
+
+                <th>
+                  Actions
+                </th>
+
               </tr>
 
             </thead>
 
 
-
             <tbody>
 
 
-              <tr *ngFor="let eq of filteredEquipements">
+              <!-- =========================
+                   ÉQUIPEMENTS
+              ========================= -->
 
+              <tr
+                *ngFor="let eq of filteredEquipements">
 
                 <td class="mono">
-                  {{eq.matriculeEquipement}}
+
+                  {{ eq.matriculeEquipement }}
+
                 </td>
-
-
-
-                <td>
-                  {{eq.dateAchatEquipement | date:'yyyy-MM-dd'}}
-                </td>
-
-
-
-                <td>
-                  {{eq.categorieEquipement}}
-                </td>
-
 
 
                 <td>
 
-                  <span 
+                  {{
+                    eq.dateAchatEquipement
+                      | date:'yyyy-MM-dd'
+                  }}
+
+                </td>
+
+
+                <td>
+
+                  {{ eq.categorieEquipement }}
+
+                </td>
+
+
+                <td>
+
+                  <span
                     class="badge"
-                    [ngClass]="badgeClass(eq.etatEquipement)">
+                    [ngClass]="
+                      badgeClass(eq.etatEquipement)
+                    ">
 
                     <span class="dot"></span>
 
-                    {{eq.etatEquipement}}
+                    {{ eq.etatEquipement }}
 
                   </span>
 
                 </td>
 
 
+                <!-- =========================
+                     ACTIONS
+                ========================= -->
 
-<td>
-  <div class="actions">
+                <td>
 
-    <!-- consulter -->
-    <button 
-      type="button"
-      aria-label="Consulter"
-      (click)="consulter(eq)">
-
-      <svg 
-        lucideEye
-        class="text-info">
-      </svg>
-
-    </button>
+                  <div class="actions">
 
 
-    <!-- modifier -->
-    <button 
-      type="button"
-      aria-label="Modifier"
-      (click)="openEditModal(eq)">
+                    <!-- CONSULTER -->
 
-      <svg 
-        lucidePencil
-        class="text-info">
-      </svg>
+                    <button
+                      type="button"
+                      aria-label="Consulter"
+                      (click)="consulter(eq)">
 
-    </button>
+                      <svg
+                        lucideEye
+                        class="text-info">
+                      </svg>
 
-
-    <!-- supprimer -->
-    <button 
-      type="button"
-      aria-label="Supprimer"
-      (click)="onDelete(eq.idEquipement)">
-
-      <svg 
-        lucideTrash2
-        class="text-danger">
-      </svg>
-
-    </button>
+                    </button>
 
 
-  </div>
-</td>
+                    <!-- MODIFIER -->
 
+                    <button
+                      type="button"
+                      aria-label="Modifier"
+                      (click)="openEditModal(eq)">
+
+                      <svg
+                        lucidePencil
+                        class="text-info">
+                      </svg>
+
+                    </button>
+
+
+                    <!-- SUPPRIMER -->
+
+                    <button
+                      type="button"
+                      aria-label="Supprimer"
+                      (click)="onDelete(eq.idEquipement)">
+
+                      <svg
+                        lucideTrash2
+                        class="text-danger">
+                      </svg>
+
+                    </button>
+
+                  </div>
+
+                </td>
 
               </tr>
 
 
+              <!-- =========================
+                   AUCUN RÉSULTAT
+              ========================= -->
 
-              <tr *ngIf="filteredEquipements.length === 0">
+              <tr
+                *ngIf="filteredEquipements.length === 0">
 
-                <td colspan="5" style="text-align:center">
+                <td
+                  colspan="5"
+                  style="text-align: center;">
 
                   Aucun équipement trouvé
 
@@ -174,44 +247,40 @@
 
             </tbody>
 
-
           </table>
 
-
         </div>
-
 
       </div>
 
 
+      <!-- =====================================================
+           MODAL AJOUT / MODIFICATION
+      ====================================================== -->
 
-
-
-      <!-- POPUP AJOUT / MODIFICATION -->
-
-
-      <div 
+      <div
         class="modal-overlay"
         *ngIf="isModalOpen">
-
 
         <div class="modal">
 
 
-          <div class="modal__head">
+          <!-- HEADER -->
 
+          <div class="modal__head">
 
             <h3>
 
-              {{isEditMode 
-              ? 'Modifier équipement' 
-              : 'Ajouter équipement'}}
+              {{
+                isEditMode
+                  ? 'Modifier équipement'
+                  : 'Ajouter équipement'
+              }}
 
             </h3>
 
 
-
-            <button 
+            <button
               type="button"
               (click)="closeModal()">
 
@@ -219,20 +288,17 @@
 
             </button>
 
-
           </div>
 
 
+          <!-- FORM -->
 
-
-
-          <form 
+          <form
             [formGroup]="equipementForm"
             (ngSubmit)="onSubmit()">
 
 
-
-
+            <!-- MATRICULE -->
 
             <div class="field">
 
@@ -241,113 +307,112 @@
               </label>
 
 
-              <input 
+              <input
                 class="input"
                 type="text"
                 formControlName="matriculeEquipement"
                 placeholder="EQ-001">
 
 
+              <small *ngIf="matriculeInvalid()">
+
+                Le matricule est obligatoire.
+
+              </small>
+
             </div>
 
 
-
-
-
+            <!-- DATE -->
 
             <div class="field">
-
 
               <label>
                 Date achat
               </label>
 
 
-              <input 
+              <input
                 class="input"
                 type="date"
                 formControlName="dateAchatEquipement">
 
 
+              <small *ngIf="dateInvalid()">
+
+                La date d'achat est obligatoire.
+
+              </small>
+
             </div>
 
 
-
-
-
+            <!-- CATÉGORIE -->
 
             <div class="field">
-
 
               <label>
                 Catégorie
               </label>
 
 
-
-              <select 
+              <select
                 class="select-full"
                 formControlName="categorieEquipement">
 
+                <option
+                  value=""
+                  disabled>
 
-                <option 
-                  *ngFor="let cat of categories"
-                  [value]="cat">
-
-                  {{cat}}
+                  Sélectionner une catégorie
 
                 </option>
 
 
+                <option
+                  *ngFor="let cat of categories"
+                  [value]="cat">
+
+                  {{ cat }}
+
+                </option>
+
               </select>
-
-
 
             </div>
 
 
-
-
-
+            <!-- ÉTAT -->
 
             <div class="field">
-
 
               <label>
                 Etat
               </label>
 
 
-
-              <select 
+              <select
                 class="select-full"
                 formControlName="etatEquipement">
 
-
-                <option 
+                <option
                   *ngFor="let etat of etats"
                   [value]="etat">
 
-                  {{etat}}
+                  {{ etat }}
 
                 </option>
 
-
               </select>
-
-
 
             </div>
 
 
-
-
-
+            <!-- FOOTER -->
 
             <div class="modal__foot">
 
-
-              <button 
+              <button
                 type="button"
                 class="btn btn-outline"
                 (click)="closeModal()">
@@ -357,106 +422,154 @@
               </button>
 
 
-
-
-
-              <button 
+              <button
                 type="submit"
                 class="btn btn-primary">
 
-                Enregistrer
+                {{
+                  isEditMode
+                    ? 'Modifier'
+                    : 'Enregistrer'
+                }}
 
               </button>
 
-
-
             </div>
-
-
-
 
           </form>
 
-
-
         </div>
-
 
       </div>
 
-<div class="modal-overlay" *ngIf="isViewMode && selectedEquipement as eq">
 
-<div class="modal">
+      <!-- =====================================================
+           MODAL CONSULTATION
+      ====================================================== -->
 
-<div class="modal__head">
+      <div
+        class="modal-overlay"
+        *ngIf="selectedEquipement as eq">
 
-<h3>Détails équipement</h3>
-
-<button 
-type="button"
-(click)="closeViewModal()">
-
-<svg lucideX></svg>
-
-</button>
-
-</div>
+        <div class="modal">
 
 
-<div class="field">
-<label>Matricule</label>
-<p>{{eq.matriculeEquipement}}</p>
-</div>
+          <!-- HEADER -->
+
+          <div class="modal__head">
+
+            <h3>
+              Détails équipement
+            </h3>
 
 
-<div class="field">
-<label>Date achat</label>
-<p>{{eq.dateAchatEquipement | date:'yyyy-MM-dd'}}</p>
-</div>
+            <button
+              type="button"
+              (click)="closeViewModal()">
+
+              <svg lucideX></svg>
+
+            </button>
+
+          </div>
 
 
-<div class="field">
-<label>Catégorie</label>
-<p>{{eq.categorieEquipement}}</p>
-</div>
+          <!-- MATRICULE -->
+
+          <div class="field">
+
+            <label>
+              Matricule
+            </label>
+
+            <p>
+              {{ eq.matriculeEquipement }}
+            </p>
+
+          </div>
 
 
-<div class="field">
+          <!-- DATE -->
 
-<label>Etat</label>
+          <div class="field">
 
-<span 
-class="badge"
-[ngClass]="badgeClass(eq.etatEquipement)">
+            <label>
+              Date achat
+            </label>
 
-{{eq.etatEquipement}}
+            <p>
 
-</span>
+              {{
+                eq.dateAchatEquipement
+                  | date:'yyyy-MM-dd'
+              }}
 
-</div>
+            </p>
 
-
-<div class="modal__foot">
-
-<button 
-class="btn btn-outline"
-(click)="closeViewModal()">
-
-Fermer
-
-</button>
-
-</div>
+          </div>
 
 
-</div>
+          <!-- CATÉGORIE -->
 
-</div>
+          <div class="field">
+
+            <label>
+              Catégorie
+            </label>
+
+            <p>
+              {{ eq.categorieEquipement }}
+            </p>
+
+          </div>
+
+
+          <!-- ÉTAT -->
+
+          <div class="field">
+
+            <label>
+              Etat
+            </label>
+
+
+            <span
+              class="badge"
+              [ngClass]="
+                badgeClass(eq.etatEquipement)
+              ">
+
+              <span class="dot"></span>
+
+              {{ eq.etatEquipement }}
+
+            </span>
+
+          </div>
+
+
+          <!-- FOOTER -->
+
+          <div class="modal__foot">
+
+            <button
+              type="button"
+              class="btn btn-outline"
+              (click)="closeViewModal()">
+
+              Fermer
+
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
 
     </main>
 
-
   </div>
-
 
 </div>

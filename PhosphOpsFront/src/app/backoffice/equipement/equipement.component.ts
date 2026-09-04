@@ -1,47 +1,97 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { Equipement, EtatEquipement } from '../../models/equipement.model';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  FormsModule
+} from '@angular/forms';
+
+import {
+  Equipement,
+  EtatEquipement
+} from '../../models/equipement.model';
+
 import { EquipementService } from '../../services/equipement.service';
+
 import { MenuComponent } from '../menu/menu.component';
 import { HeaderComponent } from '../header/header.component';
-import { LucidePlus, LucideEye, LucidePencil, LucideTrash2, LucideX } from '@lucide/angular';
+
+import {
+  LucideAngularModule,
+  Plus,
+  Eye,
+  Pencil,
+  Trash2,
+  X
+} from 'lucide-angular';
+
 
 @Component({
   selector: 'app-equipements',
+
   standalone: true,
+
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+
     MenuComponent,
     HeaderComponent,
-    LucidePlus,
-    LucideEye,
-    LucidePencil,
-    LucideTrash2,
-    LucideX,
+
   ],
+
   templateUrl: './equipement.component.html',
   styleUrls: ['./equipement.component.css']
 })
 export class EquipementComponent implements OnInit {
 
+  /* =========================
+     MENU MOBILE
+  ========================= */
+
   menuMobileOuvert = signal(false);
 
+
+  /* =========================
+     ÉQUIPEMENTS
+  ========================= */
+
   equipements: Equipement[] = [];
+
   filteredEquipements: Equipement[] = [];
 
   searchTerm = '';
 
+
+  /* =========================
+     MODALS
+  ========================= */
+
   isModalOpen = false;
+
   isEditMode = false;
+
   isViewMode = false;
 
+
   selectedEquipementId?: number;
+
   selectedEquipement?: Equipement;
 
+
+  /* =========================
+     FORMULAIRE
+  ========================= */
+
   equipementForm: FormGroup;
+
+
+  /* =========================
+     LISTES
+  ========================= */
 
   etats = Object.values(EtatEquipement);
 
@@ -54,6 +104,10 @@ export class EquipementComponent implements OnInit {
     'Filtration'
   ];
 
+
+  /* =========================
+     CONSTRUCTOR
+  ========================= */
 
   constructor(
     private equipementService: EquipementService,
@@ -87,64 +141,114 @@ export class EquipementComponent implements OnInit {
   }
 
 
+  /* =========================
+     INIT
+  ========================= */
+
   ngOnInit(): void {
+
     this.loadEquipements();
+
   }
 
+
+  /* =========================
+     CHARGER LES ÉQUIPEMENTS
+  ========================= */
 
   loadEquipements(): void {
 
     this.equipementService.getAll()
       .subscribe({
 
-        next: (data) => {
+        next: (data: Equipement[]) => {
 
-          this.equipements = data;
-          this.filteredEquipements = data;
+          console.log(
+            'ÉQUIPEMENTS ADMIN :',
+            data
+          );
+
+          console.log(
+            'NOMBRE ÉQUIPEMENTS :',
+            data?.length ?? 0
+          );
+
+
+          this.equipements = data ?? [];
+
+          this.filteredEquipements =
+            [...this.equipements];
 
         },
 
 
-        error: (err) =>
+        error: (err) => {
+
           console.error(
-            'Erreur chargement équipements',
+            'Erreur chargement équipements :',
             err
-          )
+          );
+
+          this.equipements = [];
+
+          this.filteredEquipements = [];
+
+        }
 
       });
 
   }
 
 
-
+  /* =========================
+     RECHERCHE
+  ========================= */
 
   onSearch(): void {
 
-    const term = this.searchTerm
-      .trim()
-      .toLowerCase();
+    const term =
+      this.searchTerm
+        .trim()
+        .toLowerCase();
+
+
+    if (!term) {
+
+      this.filteredEquipements =
+        [...this.equipements];
+
+      return;
+
+    }
 
 
     this.filteredEquipements =
-      this.equipements.filter(eq =>
+      this.equipements.filter(
+        (eq: Equipement) => {
 
-        eq.matriculeEquipement
-          .toLowerCase()
-          .includes(term)
+          const matricule =
+            eq.matriculeEquipement
+              ?.toLowerCase() ?? '';
 
-        ||
+          const categorie =
+            eq.categorieEquipement
+              ?.toLowerCase() ?? '';
 
-        eq.categorieEquipement
-          .toLowerCase()
-          .includes(term)
 
+          return (
+            matricule.includes(term) ||
+            categorie.includes(term)
+          );
+
+        }
       );
 
   }
 
 
-
-
+  /* =========================
+     CONSULTER
+  ========================= */
 
   consulter(equipement: Equipement): void {
 
@@ -155,6 +259,9 @@ export class EquipementComponent implements OnInit {
   }
 
 
+  /* =========================
+     FERMER MODAL CONSULTATION
+  ========================= */
 
   closeViewModal(): void {
 
@@ -165,8 +272,9 @@ export class EquipementComponent implements OnInit {
   }
 
 
-
-
+  /* =========================
+     AJOUTER
+  ========================= */
 
   openAddModal(): void {
 
@@ -177,8 +285,14 @@ export class EquipementComponent implements OnInit {
 
     this.equipementForm.reset({
 
+      matriculeEquipement: '',
+
+      dateAchatEquipement: '',
+
+      categorieEquipement: '',
+
       etatEquipement:
-      EtatEquipement.FONCTIONNEL
+        EtatEquipement.FONCTIONNEL
 
     });
 
@@ -188,11 +302,13 @@ export class EquipementComponent implements OnInit {
   }
 
 
+  /* =========================
+     MODIFIER
+  ========================= */
 
-
-
-  openEditModal(equipement: Equipement): void {
-
+  openEditModal(
+    equipement: Equipement
+  ): void {
 
     this.isEditMode = true;
 
@@ -201,21 +317,27 @@ export class EquipementComponent implements OnInit {
       equipement.idEquipement;
 
 
+    let dateAchat = '';
+
+    if (equipement.dateAchatEquipement) {
+
+      dateAchat =
+        equipement.dateAchatEquipement
+          .substring(0, 10);
+
+    }
+
 
     this.equipementForm.patchValue({
 
       matriculeEquipement:
         equipement.matriculeEquipement,
 
-
       dateAchatEquipement:
-        equipement.dateAchatEquipement
-        .substring(0,10),
-
+        dateAchat,
 
       categorieEquipement:
         equipement.categorieEquipement,
-
 
       etatEquipement:
         equipement.etatEquipement
@@ -223,30 +345,42 @@ export class EquipementComponent implements OnInit {
     });
 
 
-
     this.isModalOpen = true;
 
   }
 
 
-
-
+  /* =========================
+     FERMER MODAL AJOUT/MODIFICATION
+  ========================= */
 
   closeModal(): void {
 
     this.isModalOpen = false;
 
+    this.equipementForm.reset({
+
+      matriculeEquipement: '',
+
+      dateAchatEquipement: '',
+
+      categorieEquipement: '',
+
+      etatEquipement:
+        EtatEquipement.FONCTIONNEL
+
+    });
+
   }
 
 
-
-
-
+  /* =========================
+     SUBMIT
+  ========================= */
 
   onSubmit(): void {
 
-
-    if(this.equipementForm.invalid){
+    if (this.equipementForm.invalid) {
 
       this.equipementForm.markAllAsTouched();
 
@@ -255,35 +389,81 @@ export class EquipementComponent implements OnInit {
     }
 
 
+    const formValue =
+      this.equipementForm.value;
 
-    const formValue: Equipement = {
 
-      ...this.equipementForm.value,
+    const equipement: Equipement = {
 
+      ...formValue,
 
       dateAchatEquipement:
-      this.equipementForm.value
-      .dateAchatEquipement + "T00:00:00"
+        formValue.dateAchatEquipement
+          ? formValue.dateAchatEquipement
+            + 'T00:00:00'
+          : null
 
     };
 
 
+    /* =========================
+       MODIFICATION
+    ========================= */
 
-
-    if(
+    if (
       this.isEditMode &&
-      this.selectedEquipementId
-    ){
-
+      this.selectedEquipementId !== undefined
+    ) {
 
       this.equipementService
-      .update(
-        this.selectedEquipementId,
-        formValue
-      )
+        .update(
+          this.selectedEquipementId,
+          equipement
+        )
+        .subscribe({
+
+          next: () => {
+
+            console.log(
+              'Équipement modifié'
+            );
+
+            this.loadEquipements();
+
+            this.closeModal();
+
+          },
+
+
+          error: (err) => {
+
+            console.error(
+              'Erreur modification équipement :',
+              err
+            );
+
+          }
+
+        });
+
+      return;
+
+    }
+
+
+    /* =========================
+       CRÉATION
+    ========================= */
+
+    this.equipementService
+      .create(equipement)
       .subscribe({
 
-        next:()=>{
+        next: () => {
+
+          console.log(
+            'Équipement créé'
+          );
 
           this.loadEquipements();
 
@@ -292,108 +472,102 @@ export class EquipementComponent implements OnInit {
         },
 
 
-        error:(err)=>
-        console.error(
-          'Erreur modification',
-          err
-        )
+        error: (err) => {
+
+          console.error(
+            'Erreur création équipement :',
+            err
+          );
+
+        }
 
       });
-
-
-
-    }
-    else {
-
-
-      this.equipementService
-      .create(formValue)
-      .subscribe({
-
-        next:()=>{
-
-          this.loadEquipements();
-
-          this.closeModal();
-
-        },
-
-
-        error:(err)=>
-        console.error(
-          'Erreur création',
-          err
-        )
-
-      });
-
-
-    }
-
 
   }
 
 
-
-
-
+  /* =========================
+     SUPPRIMER
+  ========================= */
 
   onDelete(id?: number): void {
 
+    if (id === undefined) {
 
-    if(!id) return;
+      return;
+
+    }
 
 
-    if(
-      !confirm(
+    const confirmation =
+      confirm(
         'Voulez-vous vraiment supprimer cet équipement ?'
-      )
-    ) return;
+      );
 
+
+    if (!confirmation) {
+
+      return;
+
+    }
 
 
     this.equipementService
-    .delete(id)
-    .subscribe({
+      .delete(id)
+      .subscribe({
 
-      next:()=>this.loadEquipements(),
+        next: () => {
+
+          console.log(
+            'Équipement supprimé'
+          );
+
+          this.loadEquipements();
+
+        },
 
 
-      error:(err)=>
-      console.error(
-        'Erreur suppression',
-        err
-      )
+        error: (err) => {
 
-    });
+          console.error(
+            'Erreur suppression équipement :',
+            err
+          );
 
+        }
+
+      });
 
   }
 
 
+  /* =========================
+     BADGE ÉTAT
+  ========================= */
 
+  badgeClass(
+    etat: EtatEquipement
+  ): string {
 
-
-
-  badgeClass(etat: EtatEquipement): string {
-
-
-    switch(etat){
-
+    switch (etat) {
 
       case EtatEquipement.FONCTIONNEL:
+
         return 'badge-status-fonctionnel';
 
 
       case EtatEquipement.MAINTENANCE:
+
         return 'badge-status-maintenance';
 
 
       case EtatEquipement.PANNE:
+
         return 'badge-status-panne';
 
 
       default:
+
         return '';
 
     }
@@ -401,19 +575,41 @@ export class EquipementComponent implements OnInit {
   }
 
 
+  /* =========================
+     VALIDATION HELPERS
+  ========================= */
 
+  matriculeInvalid(): boolean {
 
+    const c =
+      this.equipementForm.get('matriculeEquipement');
 
-
-  toggleMenuMobile(): void {
-
-    this.menuMobileOuvert.update(
-      v => !v
-    );
+    return !!(c?.invalid && c?.touched);
 
   }
 
 
+  dateInvalid(): boolean {
+
+    const c =
+      this.equipementForm.get('dateAchatEquipement');
+
+    return !!(c?.invalid && c?.touched);
+
+  }
+
+
+  /* =========================
+     MENU MOBILE
+  ========================= */
+
+  toggleMenuMobile(): void {
+
+    this.menuMobileOuvert.update(
+      value => !value
+    );
+
+  }
 
 
   fermerMenuMobile(): void {
@@ -421,7 +617,5 @@ export class EquipementComponent implements OnInit {
     this.menuMobileOuvert.set(false);
 
   }
-
-
 
 }
