@@ -1,23 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, signal } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Personnel, PersonnelUpdate, RolePersonnel, initiales } from '../../models/personnel.model';
 import { PersonnelService } from '../../services/personnel.service';
 import { MenuComponent } from '../menu/menu.component';
 import { HeaderComponent } from '../header/header.component';
-
-declare const lucide: any;
+import { LucideAngularModule } from 'lucide-angular';
 
 type ModeModal = 'creation' | 'edition' | 'consultation';
 
 @Component({
   selector: 'app-personnel',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MenuComponent, HeaderComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MenuComponent, HeaderComponent, LucideAngularModule],
   templateUrl: './personnel.component.html',
   styleUrl: './personnel.component.css',
 })
-export class PersonnelComponent implements OnInit, AfterViewInit {
+export class PersonnelComponent implements OnInit {
   readonly initiales = initiales;
   readonly roles = Object.values(RolePersonnel);
   readonly filtres: Array<RolePersonnel | 'tous'> = [
@@ -61,23 +60,10 @@ export class PersonnelComponent implements OnInit, AfterViewInit {
     this.charger();
   }
 
-  ngAfterViewInit(): void {
-    // Une seule fois après le premier rendu — évite la boucle infinie
-    // de requestAnimationFrame causée par ngAfterViewChecked
-    if (typeof lucide !== 'undefined') {
-      lucide.createIcons();
-    }
-  }
-
   charger(): void {
     this.personnelService.getAll().subscribe({
       next: (data) => {
         this.personnel.set(data);
-        // Ré-invoque lucide après le chargement des données,
-        // car *ngFor va injecter de nouvelles icônes <i data-lucide="...">
-        if (typeof lucide !== 'undefined') {
-          setTimeout(() => lucide.createIcons(), 0);
-        }
       },
       error: (err) => console.error('Erreur chargement personnel', err),
     });

@@ -18,14 +18,7 @@ import { EquipementService } from '../../services/equipement.service';
 import { MenuComponent } from '../menu/menu.component';
 import { HeaderComponent } from '../header/header.component';
 
-import {
-  LucideAngularModule,
-  Plus,
-  Eye,
-  Pencil,
-  Trash2,
-  X
-} from 'lucide-angular';
+import { LucideAngularModule } from 'lucide-angular';
 
 
 @Component({
@@ -40,6 +33,8 @@ import {
 
     MenuComponent,
     HeaderComponent,
+
+    LucideAngularModule,
 
   ],
 

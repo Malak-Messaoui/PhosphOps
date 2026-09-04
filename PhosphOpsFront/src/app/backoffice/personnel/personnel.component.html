@@ -13,7 +13,7 @@
           <p>{{ personnel().length }} utilisateurs enregistrés</p>
         </div>
         <button type="button" class="btn btn-primary" (click)="ouvrirModal()">
-          <i data-lucide="plus"></i>Ajouter un utilisateur
+          <i-lucide name="plus"></i-lucide>Ajouter un utilisateur
         </button>
       </div>
 
@@ -57,13 +57,13 @@
                 <td>
                   <div class="actions">
                     <button type="button" aria-label="Consulter" (click)="consulter(p)">
-                      <i data-lucide="eye" class="text-info"></i>
+                      <i-lucide name="eye" class="text-info"></i-lucide>
                     </button>
                     <button type="button" aria-label="Modifier" (click)="modifier(p)">
-                      <i data-lucide="edit" class="text-info"></i>
+                      <i-lucide name="pencil" class="text-info"></i-lucide>
                     </button>
                     <button type="button" aria-label="Supprimer" (click)="supprimer(p.id)">
-                      <i data-lucide="trash-2" class="text-danger"></i>
+                      <i-lucide name="trash-2" class="text-danger"></i-lucide>
                     </button>
                   </div>
                 </td>
@@ -87,7 +87,7 @@
                  : modeModal() === 'edition' ? "Modifier l'utilisateur"
                  : "Détails de l'utilisateur" }}
             </h3>
-            <button type="button" (click)="fermerModal()" aria-label="Fermer"><i data-lucide="x"></i></button>
+            <button type="button" (click)="fermerModal()" aria-label="Fermer"><i-lucide name="x"></i-lucide></button>
           </div>
           <form [formGroup]="form" (ngSubmit)="soumettre()" novalidate>
             <div class="field">
