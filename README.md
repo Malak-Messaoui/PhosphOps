@@ -50,7 +50,7 @@ This project uses **GitHub Actions** for continuous integration and deployment. 
 - **Deploy** — automated deployment (to be configured for the target environment)
 
 Workflow definition: [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml)
-
+Démo Live : https://phosphopsfrontend-fyh6dpbwbmfahphx.swedencentral-01.azurewebsites.net/login?fbclid=IwY2xjawUaOF1wZG9mBWV4dG4DYWVtAjEwAGJyaWQRMXozYW9QRTlLV2haUlhFQzdzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEezcBdrMXJ7bU33jonIhClhWVLV69skYD3XD9OgZLoZ-IkxjmM45GMSntI3h4_aem_reb-XJoCm-2ZCazyvowl7A
 ---
 
 ## Getting Started
